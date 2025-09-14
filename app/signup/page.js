@@ -25,23 +25,26 @@ export default function SignUp() {
     }
 
     return (
-        <form onSubmit={handleSubmit}>
-            <input
-                type="email"
-                placeholder="メールアドレス"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-            />
-            <input
-                type="password"
-                placeholder="パスワード"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-            />
-            <button type="submit">サインアップ</button>
-            <div>{message}</div>
-        </form>
+        <div>
+            <h1>サインアップ</h1>
+            <form onSubmit={handleSubmit}>
+                <input
+                    type="email"
+                    placeholder="メールアドレス"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                />
+                <input
+                    type="password"
+                    placeholder="パスワード"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                />
+                <button type="submit">サインアップ</button>
+                <div>{message}</div>
+            </form>
+        </div>
     );
 }
