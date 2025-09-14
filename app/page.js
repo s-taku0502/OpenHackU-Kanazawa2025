@@ -26,7 +26,8 @@ export default function Home() {
     signOut(auth).then(() => {
     // Sign-out successful.
     }).catch((error) => {
-    // An error happened.
+      console.error("サインアウトエラー:", error);
+      alert(`サインアウトに失敗しました: ${error.message}`);
     });
   }
 

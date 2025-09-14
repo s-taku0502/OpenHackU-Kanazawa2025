@@ -16,7 +16,6 @@ export default function SignIn() {
         signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
             const user = userCredential.user;
-            setMessage("サインイン成功: " + user.email);
             router.push("/");
         })
         .catch((error) => {

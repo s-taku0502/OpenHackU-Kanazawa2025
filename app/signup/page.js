@@ -16,7 +16,6 @@ export default function SignUp() {
         createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
             const user = userCredential.user;
-            setMessage("登録成功: " + user.email);
             router.push("/");
         })
         .catch((error) => {
@@ -44,6 +43,7 @@ export default function SignUp() {
                 />
                 <button type="submit">サインアップ</button>
                 <div>{message}</div>
+                <a href="/signin">サインイン</a>
             </form>
         </div>
     );
