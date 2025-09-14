@@ -1,10 +1,10 @@
 "use client";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import "../firebase";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-export default function SignUp() {
+export default function SignIn() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [message, setMessage] = useState("");
@@ -13,10 +13,10 @@ export default function SignUp() {
     
     const handleSubmit = (e) => {
         e.preventDefault();
-        createUserWithEmailAndPassword(auth, email, password)
+        signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
             const user = userCredential.user;
-            setMessage("登録成功: " + user.email);
+            setMessage("サインイン成功: " + user.email);
             router.push("/");
         })
         .catch((error) => {
@@ -40,7 +40,7 @@ export default function SignUp() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
             />
-            <button type="submit">サインアップ</button>
+            <button type="submit">サインイン</button>
             <div>{message}</div>
         </form>
     );
