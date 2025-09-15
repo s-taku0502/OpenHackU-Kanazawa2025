@@ -20,8 +20,8 @@ export default function Home() {
     <div className="min-h-screen bg-gray-100">
       <Header />
       <main>
-        <TravelCard onOpenModal={handleOpenModal} />
-        <TravelCard onOpenModal={handleOpenModal} />
+        <TravelCard onOpenModal={handleOpenModal} key={1} />
+        <TravelCard onOpenModal={handleOpenModal} key={2} />
       </main>
 
       {isModalOpen && (
