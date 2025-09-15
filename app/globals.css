@@ -1,4 +1,7 @@
 @import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
   --background: #ffffff;
@@ -23,4 +26,28 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.bubble-top {
+  position: relative;
+  padding: 10px 15px;
+  background-color: theme('colors.orange.400');
+  color: white;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.bubble-top::before {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: -1%;
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 10px solid theme('colors.orange.400'); 
+  -webkit-transform: rotate(45deg);
+  transform: rotate(45deg);
 }

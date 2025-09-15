@@ -1,4 +1,4 @@
-export default function TravelCard() {
+export default function TravelCard({ onOpenModal }) {
   return (
     <div className="bg-white rounded-xl shadow-lg p-6 mx-4 my-6">
       <div className="flex justify-between items-center mb-4">
@@ -23,7 +23,10 @@ export default function TravelCard() {
         </div>
       </div>
       <div className="mt-6 text-center">
-        <button className="bg-orange-500 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-orange-600 transition-colors">
+        <button
+          onClick={onOpenModal}
+          className="bg-orange-500 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-orange-600 transition-colors"
+        >
           お願いする
         </button>
       </div>
