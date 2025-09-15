@@ -1,40 +1,42 @@
-'use client';
-
-import { useState } from 'react';
-import Header from '@/components/Header';
-import TravelCard from '@/components/TravelCard';
-import GiftRequestForm from '@/components/GiftRequestForm';
+"use client"
+import { getAuth, onAuthStateChanged, signOut} from "firebase/auth";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import "./firebase";
 
 export default function Home() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const auth = getAuth();
+  const router = useRouter();
+  const [email, setEmail] = useState(null);
+  const [uid, setUid] = useState(null);
 
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setEmail(user.email);
+        setUid(user.uid);
+      } else {
+        router.push("/signin");
+      }
+    });
+    return () => unsubscribe();
+  }, [auth, router]);
+  
+  const handleSignOut = () => {
+    signOut(auth).then(() => {
+    // Sign-out successful.
+    }).catch((error) => {
+      console.error("サインアウトエラー:", error);
+      alert(`サインアウトに失敗しました: ${error.message}`);
+    });
+  }
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <Header />
-      <main>
-        <TravelCard onOpenModal={handleOpenModal} key={1} />
-        <TravelCard onOpenModal={handleOpenModal} key={2} />
-      </main>
-
-      {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-end justify-center">
-          <div
-            className="absolute inset-0 bg-black opacity-50"
-            onClick={handleCloseModal}
-          ></div>
-          <div className="relative w-full h-auto max-w-lg bg-white rounded-t-3xl shadow-lg transform transition-transform duration-300 ease-out translate-y-0">
-            <GiftRequestForm onCloseModal={handleCloseModal} />
-          </div>
-        </div>
-      )}
+    <div>
+      <h1>ホーム(仮)</h1>
+      <p>メールアドレス：{email}</p>
+      <p>UID：{uid}</p>
+      <button onClick={handleSignOut}>サインアウト</button>
     </div>
   );
 }
