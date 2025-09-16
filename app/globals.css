@@ -1,9 +1,9 @@
 @import "tailwindcss";
 @tailwind base;
 @tailwind components;
-@tailwind utilities; 
+@tailwind utilities;
 
-/* :root {
+:root {
   --background: #ffffff;
   --foreground: #171717;
 }
@@ -48,5 +48,6 @@ body {
   border-left: 8px solid transparent;
   border-right: 8px solid transparent;
   border-top: 10px solid theme('colors.orange.400'); 
+  -webkit-transform: rotate(45deg);
   transform: rotate(45deg);
-} */
+}
