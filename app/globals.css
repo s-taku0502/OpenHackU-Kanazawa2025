@@ -1,4 +1,4 @@
-@import "tailwindcss";
+/* @import "tailwindcss";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -49,4 +49,4 @@ body {
   border-right: 8px solid transparent;
   border-top: 10px solid theme('colors.orange.400'); 
   transform: rotate(45deg);
-}
+} */
