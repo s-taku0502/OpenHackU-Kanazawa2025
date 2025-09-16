@@ -42,12 +42,21 @@ body {
   content: "";
   position: absolute;
   bottom: -2px;
+<<<<<<< HEAD
   left: -1%;
+=======
+  left: 15px;
+>>>>>>> main
   width: 0;
   height: 0;
   border-left: 8px solid transparent;
   border-right: 8px solid transparent;
   border-top: 10px solid theme('colors.orange.400'); 
+<<<<<<< HEAD
   -webkit-transform: rotate(45deg);
   transform: rotate(45deg);
 }
+=======
+  transform: rotate(45deg);
+}
+>>>>>>> main
