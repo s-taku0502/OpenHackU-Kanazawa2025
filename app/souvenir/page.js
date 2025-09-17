@@ -27,7 +27,21 @@ export default function Home() {
           const q = query(collection(db, "trips"), where("groupId", "==", groupId));
           const querySnapshot = await getDocs(q);
           const tripsData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-          setTrips(tripsData);
+
+          const tripsWithTravelerNames = await Promise.all(
+            tripsData.map(async (trip) => {
+              if (trip.travelerUid) {
+                const travelerDocRef = doc(db, "users", trip.travelerUid);
+                const travelerDocSnap = await getDoc(travelerDocRef);
+                if (travelerDocSnap.exists()) {
+                  return { ...trip, travelerName: travelerDocSnap.data().name };
+                }
+              }
+              return { ...trip, travelerName: '不明なユーザー' };
+            })
+          );
+
+          setTrips(tripsWithTravelerNames);
         }
       } else {
         router.push("/signin");
