@@ -11,16 +11,21 @@ export default function ResetPassword() {
     const auth = getAuth();
     const router = useRouter();
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setMessage("");
-        sendPasswordResetEmail(auth, email)
-            .then(() => {
-                setMessage("パスワード再設定用のメールを送信しました。メールをご確認ください。");
-            })
-            .catch((error) => {
-                setMessage("エラー: " + error.message);
-            });
+
+        try {
+            // Firebase AuthenticationのsendPasswordResetEmailを直接呼び出す
+            await sendPasswordResetEmail(auth, email);
+
+            // 成功メッセージを表示
+            setMessage("パスワード再設定用のメールを送信しました。メールをご確認ください。");
+
+        } catch (error) {
+            // 未登録ユーザーの場合でも、具体的なエラーメッセージは表示しない
+            setMessage("パスワード再設定用のメールを送信しました。メールをご確認ください。");
+        }
     };
 
     return (
@@ -73,7 +78,7 @@ export default function ResetPassword() {
                         再設定メールを送信
                     </button>
                 </div>
-                <div className={message.startsWith("エラー") ? "text-red-500" : "text-green-600"}>{message}</div>
+                <div className="text-green-600">{message}</div>
                 <div>
                     <Link href="/login" className="text-blue-500 underline">ログイン画面に戻る</Link>
                 </div>
