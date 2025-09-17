@@ -215,7 +215,7 @@ export default function SignUp() {
                 </div>
                 <div className="text-red-500">{message}</div>
                 すでにアカウントをお持ちの方は
-                <a href="/signin" className="text-blue-600 underline">サインイン</a>
+                <a href="/login" className="text-blue-600 underline">新規登録</a>
             </form>
         </div>
     );
