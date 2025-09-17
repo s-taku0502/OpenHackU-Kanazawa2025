@@ -3,7 +3,7 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
+/* :root {
   --background: #ffffff;
   --foreground: #171717;
 }
@@ -50,4 +50,4 @@ body {
   border-top: 10px solid theme('colors.orange.400'); 
   -webkit-transform: rotate(45deg);
   transform: rotate(45deg);
-}
+} */
