@@ -42,6 +42,14 @@ export default function GiftRequestForm({ onCloseModal, tripId }) {
             <div className="w-20 h-20 bg-gray-300 rounded-full"></div>
           </div>
           <div className="mb-4">
+            <label htmlFor="item" className="block text-gray-700 font-semibold mb-2">旅行予定地</label>
+            <input 
+              type="text" 
+              id="tripLocation" 
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-black" 
+            />
+          </div>
+          <div className="mb-4">
             <label htmlFor="item" className="block text-gray-700 font-semibold mb-2">希望の物</label>
             <input 
               type="text" 
