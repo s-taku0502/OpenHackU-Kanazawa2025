@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 export default function TravelCard({ onOpenModal, trip }) {
   const formatDate = (timestamp) => {
     if (!timestamp) return '未設定';
@@ -7,8 +9,18 @@ export default function TravelCard({ onOpenModal, trip }) {
   return (
     <div className="bg-white rounded-xl shadow-lg p-6 mx-4 my-6">
       <div className="flex justify-between items-center mb-4">
-        <div className="w-10 h-10 bg-gray-300 rounded-full"></div>
-        <p>{trip.travelerName}</p>
+        <div className="w-10 h-10 relative rounded-full overflow-hidden bg-gray-300 flex-shrink-0">
+          {/* personalImageUrlは親から渡す or 取得しておく必要あり */}
+          <Image
+            src={'/file.svg'}
+            alt="旅行者アイコン"
+            fill
+            className="rounded-full"
+            sizes="35px"
+            priority
+          />
+        </div>
+        <p>旅行者名：{trip.travelerName}</p>
         <span className="text-sm text-gray-500">{formatDate(trip.createdAt)}</span>
       </div>
       <div className="space-y-4 text-gray-700">
