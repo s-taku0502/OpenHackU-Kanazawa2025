@@ -1,11 +1,4 @@
 const SearchResultPage = ({ group, onBack, onJoin, message, setMessage }) => {
-    if (!group && !message) {
-        return (
-            <div className="flex items-center justify-center min-h-screen">
-                <p>グループが見つかりませんでした。</p>
-            </div>
-        );
-    }
 
     const handleJoinClick = () => {
         setMessage("");
