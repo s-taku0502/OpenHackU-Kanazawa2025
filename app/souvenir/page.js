@@ -15,6 +15,7 @@ export default function Home() {
   const [isTripModalOpen, setIsTripModalOpen] = useState(false);
   const [trips, setTrips] = useState([]);
   const [user, setUser] = useState(null);
+  const [selectedTripId, setSelectedTripId] = useState(null);
   const auth = getAuth();
   const router = useRouter();
 
@@ -50,12 +51,14 @@ export default function Home() {
     return () => unsubscribe();
   }, [auth, router]);
 
-  const handleOpenModal = () => {
+  const handleOpenModal = (tripId) => {
+    setSelectedTripId(tripId);
     setIsModalOpen(true);
   };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
+    setSelectedTripId(null);
   };
 
   const handleOpenTripModal = () => {
@@ -98,7 +101,7 @@ export default function Home() {
         <button onClick={handleOpenTripModal}>旅行予定を追加</button>
         {trips.length > 0 ? (
           trips.map(trip => (
-            <TravelCard key={trip.id} trip={trip} onOpenModal={handleOpenModal} />
+            <TravelCard key={trip.id} trip={trip} onOpenModal={() => handleOpenModal(trip.id)} />
           ))
         ) : (
           <p className="text-center mt-8 text-gray-500">登録されている旅行の予定はありません。</p>
@@ -112,7 +115,7 @@ export default function Home() {
             onClick={handleCloseModal}
           ></div>
           <div className="relative w-full h-auto max-w-lg bg-white rounded-t-3xl shadow-lg transform transition-transform duration-300 ease-out translate-y-0">
-            <GiftRequestForm onCloseModal={handleCloseModal} />
+            <GiftRequestForm onCloseModal={handleCloseModal} tripId={selectedTripId} />
           </div>
         </div>
       )}
