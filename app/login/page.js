@@ -72,10 +72,12 @@ export default function SignIn() {
                     />
                 </div>
 
+                <div className="text-gray-500 text-sm mb-4">パスワードを忘れた場合は<Link href="/reset-password" className="text-blue-500 underline">こちら</Link>からリセットしてください。</div>
+
                 <div>
                     <button
                         type="submit"
-                        className="px-6 py-2 text-white font-bold hover:opacity-90 transition mx-auto block"
+                        className="px-6 py-2 mx-8 text-white font-bold hover:opacity-90 transition mx-auto block"
                         style={{
                             borderRadius: "25px",
                             background: "#FF9F1C",
@@ -86,9 +88,11 @@ export default function SignIn() {
                 </div>
 
                 <div className="text-red-500">{message}</div>
-
-                まだアカウントをお持ちでない方は
-                <Link href="/signup" className="text-blue-600 underline">サインアップ</Link>
+                <div>
+                    アカウントをお持ちでない方は
+                    <Link href="/signup" className="text-blue-500 underline">こちら</Link>
+                    から登録してください。
+                </div>
             </form>
         </div>
     );
