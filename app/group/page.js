@@ -1,5 +1,5 @@
 "use client";
-import UserList from "../../components/UserList.";
+import UserList from "../../components/UserList";
 import FooterMenu from "../../components/FooterMenu";
 import CreateGroupPage from "../../components/CreateGroupPage"
 import JoinGroupPage from "../../components/JoinGroupPage";
