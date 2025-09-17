@@ -1,11 +1,11 @@
 "use client";
 import { getAuth, confirmPasswordReset } from "firebase/auth";
 import "../firebase";
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 
-export default function PasswordResetConfirm() {
+function ResetPageContent() {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [message, setMessage] = useState("");
@@ -106,5 +106,13 @@ export default function PasswordResetConfirm() {
                 </div>
             </form>
         </div>
+    );
+}
+
+export default function Page() {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <ResetPageContent />
+        </Suspense>
     );
 }
