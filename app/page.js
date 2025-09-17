@@ -23,7 +23,7 @@ export default function Home() {
           setName(userDocSnap.data().name);
         }
       } else {
-        router.push("/signin");
+        router.push("/login");
       }
     });
     return () => unsubscribe();
