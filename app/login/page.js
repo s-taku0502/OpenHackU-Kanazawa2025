@@ -26,6 +26,8 @@ export default function SignIn() {
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen" style={{ backgroundColor: "#FFF7EE" }}>
+            <h1 className="text-3xl font-bold mb-8">ログイン</h1>
+
             <form
                 onSubmit={handleSubmit}
                 className="flex flex-col gap-4 p-8 rounded-lg bg-transparent items-center justify-center"
