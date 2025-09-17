@@ -1,6 +1,6 @@
 import { FaPlus, FaReply } from 'react-icons/fa';
 
-const Footermenu = ({ onCreateClick, onJoinClick }) => {
+const FooterMenu = ({ onCreateClick, onJoinClick }) => {
   return (
     <footer className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4">
       {/* 新規グループ制作 */}
@@ -24,4 +24,4 @@ const Footermenu = ({ onCreateClick, onJoinClick }) => {
   );
 };
 
-export default Footermenu;
+export default FooterMenu;
