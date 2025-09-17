@@ -20,7 +20,7 @@ export default function TripCreateForm({ onCloseModal, user, onTripCreated }) {
       const userDocRef = doc(db, "users", user.uid);
       const userDocSnap = await getDoc(userDocRef);
       const groupId = userDocSnap.data().applying_groupId;
-
+      const travelerName = userDocSnap.data().name;
       await addDoc(collection(db, 'trips'), {
         destination,
         startDate: new Date(startDate),
@@ -29,6 +29,7 @@ export default function TripCreateForm({ onCloseModal, user, onTripCreated }) {
         deadline: new Date(deadline),
         comment: comment,
         travelerUid: user.uid,
+        travelerName: travelerName,
         groupId: groupId,
         createdAt: serverTimestamp(),
       });
@@ -37,7 +38,7 @@ export default function TripCreateForm({ onCloseModal, user, onTripCreated }) {
       onCloseModal();
     } catch (error) {
       console.error("旅行登録エラー:", error);
-      setMessage(`登録に失敗しました: ${error.message}`);
+      setMessage('登録に失敗しました。時間をおいて再度お試しください。');
     }
   };
 
