@@ -77,7 +77,7 @@ export default function GroupPage() {
         groupIds: arrayUnion(groupDocRef.id),
         applying_groupId: groupDocRef.id,
       });
-      setCreateMessage(`グループ「${newGroupName}」を作成しました！`);
+      setCreateMessage("グループ「${newGroupName}」を作成しました！");
 
       const newUserGroups = userGroups
         .filter((group) => group.id !== groupDocRef.id)
@@ -89,7 +89,7 @@ export default function GroupPage() {
     } catch (error) {
       console.error("グループ作成エラー:", error);
       // Corrected setter here
-      setCreateMessage(`グループの作成に失敗しました: ${error.message}`);
+      setCreateMessage("グループの作成に失敗しました: ${error.message}");
     }
   };
 
@@ -110,7 +110,7 @@ export default function GroupPage() {
     } catch (error) {
       console.error("グループ検索エラー:", error);
       // Corrected setter here
-      setJoinMessage(`グループの検索に失敗しました: ${error.message}`);
+      setJoinMessage("グループの検索に失敗しました: ${error.message}");
       setSearchedGroup(null);
     }
   };
@@ -153,7 +153,7 @@ export default function GroupPage() {
     } catch (error) {
       console.error("グループ参加エラー:", error);
       // Corrected setter here
-      setJoinMessage(`グループへの参加に失敗しました: ${error.message}`);
+      setJoinMessage("グループへの参加に失敗しました: ${error.message}");
     }
   };
 
@@ -166,11 +166,11 @@ export default function GroupPage() {
       });
       setAppliedGroupId(groupId);
       // Corrected setter here
-      setJoinMessage(``);
+      setJoinMessage("");
     } catch (error) {
       console.error("グループ適用エラー:", error);
       // Corrected setter here
-      setJoinMessage(`グループの適用に失敗しました: ${error.message}`);
+      setJoinMessage("グループの適用に失敗しました: ${error.message}");
     }
   };
   const [currentPage, setCurrentPage] = useState("groupList");
