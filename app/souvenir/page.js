@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import TravelCard from '@/components/TravelCard';
 import GiftRequestForm from '@/components/GiftRequestForm';
+import TripCreateForm from '@/components/TripCreateForm';
 import { db } from '../firebase';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
@@ -11,23 +12,23 @@ import { useRouter } from 'next/navigation';
 
 export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isTripModalOpen, setIsTripModalOpen] = useState(false);
   const [trips, setTrips] = useState([]);
+  const [user, setUser] = useState(null);
   const auth = getAuth();
   const router = useRouter();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
+        setUser(currentUser);
         const userDocRef = doc(db, "users", currentUser.uid);
         const userDocSnap = await getDoc(userDocRef);
-        
         if (userDocSnap.exists() && userDocSnap.data().applying_groupId) {
           const groupId = userDocSnap.data().applying_groupId;
-          
           const q = query(collection(db, "trips"), where("groupId", "==", groupId));
           const querySnapshot = await getDocs(q);
           const tripsData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-
           const tripsWithTravelerNames = await Promise.all(
             tripsData.map(async (trip) => {
               if (trip.travelerUid) {
@@ -40,14 +41,12 @@ export default function Home() {
               return { ...trip, travelerName: '不明なユーザー' };
             })
           );
-
           setTrips(tripsWithTravelerNames);
         }
       } else {
         router.push("/signin");
       }
     });
-
     return () => unsubscribe();
   }, [auth, router]);
 
@@ -59,10 +58,44 @@ export default function Home() {
     setIsModalOpen(false);
   };
 
+  const handleOpenTripModal = () => {
+    setIsTripModalOpen(true);
+  };
+
+  const handleCloseTripModal = () => {
+    setIsTripModalOpen(false);
+  };
+
+  const handleTripCreated = async () => {
+    if (!user) return;
+    const userDocRef = doc(db, "users", user.uid);
+    const userDocSnap = await getDoc(userDocRef);
+    if (userDocSnap.exists() && userDocSnap.data().applying_groupId) {
+      const groupId = userDocSnap.data().applying_groupId;
+      const q = query(collection(db, "trips"), where("groupId", "==", groupId));
+      const querySnapshot = await getDocs(q);
+      const tripsData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      const tripsWithTravelerNames = await Promise.all(
+        tripsData.map(async (trip) => {
+          if (trip.travelerUid) {
+            const travelerDocRef = doc(db, "users", trip.travelerUid);
+            const travelerDocSnap = await getDoc(travelerDocRef);
+            if (travelerDocSnap.exists()) {
+              return { ...trip, travelerName: travelerDocSnap.data().name };
+            }
+          }
+          return { ...trip, travelerName: '不明なユーザー' };
+        })
+      );
+      setTrips(tripsWithTravelerNames);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-100">
       <Header />
       <main>
+        <button onClick={handleOpenTripModal}>旅行予定を追加</button>
         {trips.length > 0 ? (
           trips.map(trip => (
             <TravelCard key={trip.id} trip={trip} onOpenModal={handleOpenModal} />
@@ -80,6 +113,22 @@ export default function Home() {
           ></div>
           <div className="relative w-full h-auto max-w-lg bg-white rounded-t-3xl shadow-lg transform transition-transform duration-300 ease-out translate-y-0">
             <GiftRequestForm onCloseModal={handleCloseModal} />
+          </div>
+        </div>
+      )}
+
+      {isTripModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-end justify-center">
+          <div
+            className="absolute inset-0 bg-black opacity-50"
+            onClick={handleCloseTripModal}
+          ></div>
+          <div className="relative w-full h-auto max-w-lg bg-white rounded-t-3xl shadow-lg transform transition-transform duration-300 ease-out translate-y-0">
+            <TripCreateForm
+              onCloseModal={handleCloseTripModal}
+              user={user}
+              onTripCreated={handleTripCreated}
+            />
           </div>
         </div>
       )}
