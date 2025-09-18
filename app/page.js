@@ -188,7 +188,7 @@ export default function Home() {
         )}
         {activeTab === 'お土産' && (
           <div className="space-y-6">
-            <SouvenirPhoto />
+            <SouvenirPhoto userUid={user?.uid} />
           </div>
         )}
       </main>
