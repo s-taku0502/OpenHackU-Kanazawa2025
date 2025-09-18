@@ -24,6 +24,7 @@ export default function Setting() {
     const [pwMsg, setPwMsg] = useState("");
     const [showEmailForm, setShowEmailForm] = useState(false);
     const [showPwForm, setShowPwForm] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
 
     // Firestoreからプロフィール情報を取得
     useEffect(() => {
@@ -194,13 +195,51 @@ export default function Setting() {
                     }
                 }} className="flex flex-col gap-2 mt-2 p-4 rounded-lg bg-white shadow w-full max-w-md">
                     <label>パスワード変更</label>
-                    <input
-                        className="px-4 py-2 focus:outline-none border rounded"
-                        type="password"
-                        value={newPassword}
-                        onChange={e => setNewPassword(e.target.value)}
-                        required
-                    />
+                    <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+                        <input
+                            className="px-4 py-2 focus:outline-none border rounded w-full pr-10"
+                            style={{
+                                borderRadius: "25px",
+                                border: "1px solid #EDEDED",
+                                background: "#FFF",
+                                blockSize: "35px",
+                                alignSelf: "stretch",
+                                inlineSize: "80vw",
+                                maxInlineSize: "500px",
+                            }}
+                            type={showPassword ? "text" : "password"}
+                            placeholder="新しいパスワード"
+                            value={newPassword}
+                            onChange={e => setNewPassword(e.target.value)}
+                            required
+                        />
+                        <button
+                            type="button"
+                            onClick={() => setShowPassword((prev) => !prev)}
+                            style={{
+                                position: 'absolute',
+                                insetInlineEnd: 12,
+                                background: 'none',
+                                border: 'none',
+                                padding: 0,
+                                cursor: 'pointer',
+                                outline: 'none',
+                                display: 'flex',
+                                alignItems: 'center',
+                                blockSize: '100%'
+                            }}
+                            tabIndex={-1}
+                            aria-label={showPassword ? "パスワードを隠す" : "パスワードを表示"}
+                        >
+                            {showPassword ? (
+                                // eye-off icon
+                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="gray"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-5 0-9-4.03-9-7 0-1.13.47-2.24 1.32-3.32m2.1-2.1C7.97 5.47 9.08 5 10.2 5c1.13 0 2.24.47 3.32 1.32m2.1 2.1C18.53 7.97 19 9.08 19 10.2c0 1.13-.47 2.24-1.32 3.32m-2.1 2.1C16.03 18.53 14.92 19 13.8 19c-1.13 0-2.24-.47-3.32-1.32m-2.1-2.1C5.47 16.03 5 14.92 5 13.8c0-1.13.47-2.24 1.32-3.32m2.1-2.1C7.97 5.47 9.08 5 10.2 5c1.13 0 2.24.47 3.32 1.32" /></svg>
+                            ) : (
+                                // eye icon
+                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="gray"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                            )}
+                        </button>
+                    </div>
                     <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded">パスワード変更</button>
                     <div className="text-green-600">{pwMsg}</div>
                 </form>
