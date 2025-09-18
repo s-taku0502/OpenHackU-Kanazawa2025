@@ -1,4 +1,9 @@
 "use client";
+import UserList from "@/components/UserList";
+import FooterMenu from "@/components/FooterMenu";
+import CreateGroupPage from "@/components/CreateGroupPage"
+import JoinGroupPage from "@/components/JoinGroupPage";
+import SearchResultPage from "@/components/SearchResultPage";
 import { useState, useEffect } from "react";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { db } from "../firebase";
@@ -18,7 +23,10 @@ export default function GroupPage() {
   const [user, setUser] = useState(null);
   const [userGroups, setUserGroups] = useState([]);
   const [appliedGroupId, setAppliedGroupId] = useState("");
-  const [message, setMessage] = useState("");
+  // Corrected state variables
+  const [joinMessage, setJoinMessage] = useState("");
+  const [createMessage, setCreateMessage] = useState("");
+  const [searchedGroup, setSearchedGroup] = useState(null);
   const auth = getAuth();
   const router = useRouter();
 
@@ -54,15 +62,14 @@ export default function GroupPage() {
     return () => unsubscribe();
   }, [auth, router]);
 
-  const handleCreateGroup = async (e) => {
-    e.preventDefault();
-    if (!user || !groupName.trim()) {
-      setMessage("グループ名を入力してください。");
+  const handleCreateGroup = async (newGroupName) => {
+    if (!user || !newGroupName.trim()) {
+      setCreateMessage("グループ名を入力してください。");
       return;
     }
     try {
       const groupDocRef = await addDoc(collection(db, "groups"), {
-        name: groupName,
+        name: newGroupName,
         memberUids: [user.uid],
       });
       const userDocRef = doc(db, "users", user.uid);
@@ -70,52 +77,83 @@ export default function GroupPage() {
         groupIds: arrayUnion(groupDocRef.id),
         applying_groupId: groupDocRef.id,
       });
-      setMessage(`グループ「${groupName}」を作成しました！`);
-      setGroupName("");
-      const newUserGroups = [...userGroups, { id: groupDocRef.id, name: groupName }];
+      setCreateMessage("");
+
+      const newUserGroups = userGroups
+        .filter((group) => group.id !== groupDocRef.id)
+        .concat({ id: groupDocRef.id, name: newGroupName });
+
       setUserGroups(newUserGroups);
       setAppliedGroupId(groupDocRef.id);
+      setCurrentPage("groupList");
     } catch (error) {
       console.error("グループ作成エラー:", error);
-      setMessage(`グループの作成に失敗しました: ${error.message}`);
+      // Corrected setter here
+      setCreateMessage("グループの作成に失敗しました: ${error.message}");
     }
   };
 
-  const handleJoinGroup = async (e) => {
-    e.preventDefault();
-    if (!user || !joinGroupId.trim()) {
-      setMessage("グループIDを入力してください。");
+  const handleSearchGroup = async (searchId) => {
+    try {
+      const groupDocRef = doc(db, "groups", searchId);
+      const groupDocSnap = await getDoc(groupDocRef);
+
+      if (groupDocSnap.exists()) {
+        const groupData = { id: groupDocSnap.id, ...groupDocSnap.data() };
+        setSearchedGroup(groupData);
+        setCurrentPage("searchResult");
+      } else {
+        // Corrected setter here
+        setJoinMessage("指定されたグループは存在しません。");
+        setSearchedGroup(null);
+      }
+    } catch (error) {
+      console.error("グループ検索エラー:", error);
+      // Corrected setter here
+      setJoinMessage("グループの検索に失敗しました: ${error.message}");
+      setSearchedGroup(null);
+    }
+  };
+
+  const handleJoinGroup = async (groupId) => {
+    if (!user) {
+      // Corrected setter here
+      setJoinMessage("ログインしてください。");
       return;
     }
+
+    // Corrected getter here
+    if (userGroups.some(group => group.id === groupId)) {
+      // Corrected setter here
+      setJoinMessage("このグループにはすでに参加済みです。");
+      setSearchedGroup(null);
+      return;
+    }
+
     try {
-      const groupDocRef = doc(db, "groups", joinGroupId);
-      const groupDocSnap = await getDoc(groupDocRef);
-      if (!groupDocSnap.exists()) {
-        setMessage("指定されたグループは存在しません。");
-        return;
-      }
-
-      const groupData = groupDocSnap.data();
-
+      const groupDocRef = doc(db, "groups", groupId);
       await updateDoc(groupDocRef, {
         memberUids: arrayUnion(user.uid),
       });
       const userDocRef = doc(db, "users", user.uid);
       await updateDoc(userDocRef, {
-        groupIds: arrayUnion(joinGroupId),
-        applying_groupId: joinGroupId,
+        groupIds: arrayUnion(groupId),
+        applying_groupId: groupId,
       });
-
-      setMessage(`グループに参加しました！`);
-      setJoinGroupId("");
-      if (!userGroups.some(group => group.id === joinGroupId)) {
-        const newUserGroups = [...userGroups, { id: joinGroupId, ...groupData }];
+      const newGroupData = await getDoc(groupDocRef);
+      if (newGroupData.exists()) {
+        const newUserGroups = userGroups
+          .filter((group) => group.id !== groupId)
+          .concat({ id: groupId, ...newGroupData.data() });
         setUserGroups(newUserGroups);
       }
-      setAppliedGroupId(joinGroupId);
+      setAppliedGroupId(groupId);
+      setSearchedGroup(null);
+      setCurrentPage("groupList");
     } catch (error) {
       console.error("グループ参加エラー:", error);
-      setMessage(`グループへの参加に失敗しました: ${error.message}`);
+      // Corrected setter here
+      setJoinMessage("グループへの参加に失敗しました: ${error.message}");
     }
   };
 
@@ -127,72 +165,62 @@ export default function GroupPage() {
         applying_groupId: groupId,
       });
       setAppliedGroupId(groupId);
-      setMessage(`グループを適用しました。`);
+      // Corrected setter here
+      setJoinMessage("");
     } catch (error) {
       console.error("グループ適用エラー:", error);
-      setMessage(`グループの適用に失敗しました: ${error.message}`);
+      // Corrected setter here
+      setJoinMessage("グループの適用に失敗しました: ${error.message}");
     }
   };
+  const [currentPage, setCurrentPage] = useState("groupList");
+
+  const handleCreateClick = () => {
+    setCurrentPage("createGroup");
+  };
+
+  const handleJoinClick = () => {
+    setCurrentPage("joinGroup");
+  };
+
+  const handleBackClick = () => {
+    setCurrentPage("groupList");
+    setSearchedGroup(null);
+    // Corrected setters
+    setJoinMessage("");
+    setCreateMessage("");
+  };
+
+  if (currentPage === "createGroup") {
+    return <CreateGroupPage onBack={handleBackClick} onCreateGroup={handleCreateGroup} message={createMessage} setMessage={setCreateMessage} />;
+  }
+
+  if (currentPage === "joinGroup") {
+    // Corrected props
+    return <JoinGroupPage onBack={handleBackClick} onSearch={handleSearchGroup} message={joinMessage} setMessage={setJoinMessage} />;
+  }
+
+  if (currentPage === "searchResult") {
+    // Corrected props
+    return <SearchResultPage group={searchedGroup} onBack={handleBackClick} onJoin={handleJoinGroup} message={joinMessage} setMessage={setJoinMessage} />;
+  }
 
   return (
-    <div>
-      <h1>グループページ</h1>
-      {message && <p style={{ color: "green" }}>{message}</p>}
+    <div className="min-h-screen bg-white text-gray-800">
+      <main className="p-4">
+        <UserList users={userGroups.map(group => ({
+          id: group.id,
+          name: group.name,
+        }))}
+          appliedGroupId={appliedGroupId}
+          onApplyGroup={handleApplyGroup}
+        />
+      </main>
 
-      <section style={{ marginTop: "2rem" }}>
-        <h2>参加中のグループ</h2>
-        {userGroups.length > 0 ? (
-          <ul>
-            {userGroups.map((group) => (
-              <li key={group.id}>
-                {group.name} (ID: {group.id})
-                {appliedGroupId === group.id ? (
-                  <span style={{ marginLeft: "10px", color: "blue" }}>
-                    (適用中)
-                  </span>
-                ) : (
-                  <button
-                    onClick={() => handleApplyGroup(group.id)}
-                    style={{ marginLeft: "10px" }}
-                  >
-                    適用
-                  </button>
-                )}
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p>参加しているグループはありません。</p>
-        )}
-      </section>
-
-      <section>
-        <h2>新しいグループを作成</h2>
-        <form onSubmit={handleCreateGroup}>
-          <input
-            type="text"
-            value={groupName}
-            onChange={(e) => setGroupName(e.target.value)}
-            placeholder="新しいグループ名"
-            required
-          />
-          <button type="submit">作成</button>
-        </form>
-      </section>
-
-      <section style={{ marginTop: "2rem" }}>
-        <h2>既存のグループに参加</h2>
-        <form onSubmit={handleJoinGroup}>
-          <input
-            type="text"
-            value={joinGroupId}
-            onChange={(e) => setJoinGroupId(e.target.value)}
-            placeholder="グループID"
-            required
-          />
-          <button type="submit">参加</button>
-        </form>
-      </section>
+      <FooterMenu
+        onCreateClick={handleCreateClick}
+        onJoinClick={handleJoinClick}
+      />
     </div>
   );
 }
