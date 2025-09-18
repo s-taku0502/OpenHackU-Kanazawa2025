@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { db } from '../app/firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
-import { MdDateRange } from "react-icons/md";
+import { MdClose } from "react-icons/md";
 
 export default function GiftRequestForm({ onCloseModal, tripId }) {
   const [souvenirName, setSouvenirName] = useState('');
@@ -55,20 +55,12 @@ export default function GiftRequestForm({ onCloseModal, tripId }) {
           className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 transition duration-300"
           aria-label="Close"
         >
-          <span><MdDateRange viewBox="0 0 320 512" fill="currentColor" className="h-6 w-6" /></span>
+          <span><MdClose className="h-6 w-6" /></span>
         </button>
         <div className="flex justify-center mb-6">
           <div className="w-20 h-20 bg-gray-300 rounded-full"></div>
         </div>
         <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label htmlFor="tripLocation" className="block text-gray-700 font-semibold mb-2">旅行予定地</label>
-            <input
-              type="text"
-              id="tripLocation"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-black"
-            />
-          </div>
           <div className="mb-4">
             <label htmlFor="item" className="block text-gray-700 font-semibold mb-2">旅行予定地</label>
             <input 
