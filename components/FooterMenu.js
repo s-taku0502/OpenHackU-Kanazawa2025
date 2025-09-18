@@ -3,7 +3,7 @@ import { FaPlus, FaReply } from 'react-icons/fa';
 const FooterMenu = ({ onCreateClick, onJoinClick }) => {
   return (
     <footer className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4">
-      {/* 新規グループ制作 */}
+      {/* グループ作成 */}
       <div
         className="flex items-center space-x-4 mb-4 cursor-pointer"
         onClick={onCreateClick}

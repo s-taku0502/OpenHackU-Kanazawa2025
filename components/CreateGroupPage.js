@@ -13,7 +13,7 @@ const CreateGroupPage = ({ onBack, onCreateGroup, message, setMessage }) => {
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-white text-gray-800">
             <header className="fixed top-0 w-full flex justify-between items-center p-4 border-b border-gray-200">
-                <p className="font-semibold text-xl">グループ制作</p>
+                <p className="font-semibold text-xl">グループ作成</p>
             </header>
 
             <div className="flex-grow flex flex-col items-center justify-center p-4 w-full max-w-sm">
