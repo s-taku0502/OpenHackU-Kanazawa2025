@@ -13,6 +13,7 @@ import { FaUserFriends } from "react-icons/fa";
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -111,6 +112,16 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gray-100 relative">
       <header className="flex items-center justify-between p-4 bg-white border-b border-gray-200">
+        <div className="w-10 h-10 relative">
+          <Image
+            src={'/file.svg'}
+            alt="グループアイコン"
+            fill
+            className="rounded-full"
+            sizes="35px"
+            priority
+          />
+        </div>
         <div className="flex-1 flex justify-center">
           <nav className="flex space-x-4">
             {['予定', 'お土産'].map(tab => (
