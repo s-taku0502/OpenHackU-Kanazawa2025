@@ -24,6 +24,7 @@ export default function Home() {
   const [activeTab, setActiveTab] = useState('予定');
   const auth = getAuth();
   const router = useRouter();
+  const [isHeaderLoading, setIsHeaderLoading] = useState(false);
   const [isSouvenirModalOpen, setIsSouvenirModalOpen] = useState(false);
 
 
@@ -107,13 +108,32 @@ export default function Home() {
   };
 
   // ...existing code...
-  const handleGoGroup = () => router.push('/group');
-  const handleGoContact = () => router.push('/contact');
-  const handleGoSetting = () => router.push('/setting');
+  const handleGoGroup = () => {
+    setIsHeaderLoading(true);
+    router.push('/group');
+  };
+  const handleGoContact = () => {
+    setIsHeaderLoading(true);
+    router.push('/contact');
+  };
+  const handleGoSetting = () => {
+    setIsHeaderLoading(true);
+    router.push('/setting');
+  };
+
+  // ページ遷移完了時にローディング解除
+  useEffect(() => {
+    const handleRouteChangeComplete = () => setIsHeaderLoading(false);
+    // next/navigationのrouter.eventsは使えないため、windowのpopstateで最低限対応
+    window.addEventListener('popstate', handleRouteChangeComplete);
+    return () => {
+      window.removeEventListener('popstate', handleRouteChangeComplete);
+    };
+  }, []);
 
   return (
     <div className="min-h-screen bg-orange-100 relative">
-      <header className="flex items-center justify-between p-4 bg-white border-b border-gray-200">
+  <header className="flex items-center justify-between p-4 bg-white border-b border-gray-200 relative">
         <div className="w-10 h-10 relative">
           <Image
             src={'/file.svg'}
@@ -138,10 +158,21 @@ export default function Home() {
           </nav>
         </div>
         <div className="flex space-x-4">
-          <button type="button" aria-label="グループ変更" onClick={handleGoGroup}><FaUserFriends className="text-xl text-orange-500" /></button>
-          <button type="button" aria-label="お問い合わせ" onClick={handleGoContact}><CiMail className="text-xl text-orange-500" /></button>
-          <button type="button" aria-label="設定" onClick={handleGoSetting}><FaCog className="text-xl text-orange-500" /></button>
+          <button type="button" aria-label="グループ変更" onClick={handleGoGroup} disabled={isHeaderLoading}><FaUserFriends className="text-xl text-orange-500" /></button>
+          <button type="button" aria-label="お問い合わせ" onClick={handleGoContact} disabled={isHeaderLoading}><CiMail className="text-xl text-orange-500" /></button>
+          <button type="button" aria-label="設定" onClick={handleGoSetting} disabled={isHeaderLoading}><FaCog className="text-xl text-orange-500" /></button>
         </div>
+        {isHeaderLoading && (
+          <div className="absolute right-0 top-full mt-2 flex justify-end w-full z-50">
+            <div className="flex items-center space-x-2 bg-white px-4 py-2 rounded shadow border border-orange-200 animate-pulse">
+              <svg className="animate-spin h-5 w-5 text-orange-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+              </svg>
+              <span className="text-orange-500 text-sm">ページ遷移中...</span>
+            </div>
+          </div>
+        )}
       </header>
       <main className="p-4">
         {activeTab === '予定' && (
