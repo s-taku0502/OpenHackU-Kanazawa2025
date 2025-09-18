@@ -1,12 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-// Firebaseの初期化関連のインポートを削除
 import { collection, addDoc, serverTimestamp, doc, getDoc } from 'firebase/firestore';
-// アプリ全体で共有されるdbインスタンスをインポート
 import { db } from '@/app/firebase';
 
-// propsとしてuserを受け取るように変更
 export default function TripCreateForm({ onCloseModal, onTripCreated, user }) {
   const [destination, setDestination] = useState('');
   const [startDate, setStartDate] = useState('');
