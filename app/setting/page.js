@@ -1,5 +1,6 @@
 "use client";
 import { getAuth, onAuthStateChanged, updateEmail, updatePassword } from "firebase/auth";
+import Image from "next/image";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db, storage } from "../firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -65,11 +66,16 @@ export default function Setting() {
         const file = e.target.files[0];
         if (!file || !user) return;
         setIconFile(file);
-        const storageRef = ref(storage, `user_icons/${user.uid}/${file.name}`);
-        await uploadBytes(storageRef, file);
-        const url = await getDownloadURL(storageRef);
-        setIconUrl(url);
-        setMessage("アイコン画像をアップロードしました");
+        const storageRef = ref(storage, `user_icons/${user.uid}/profile_image`);
+        try {
+            await uploadBytes(storageRef, file);
+            const url = await getDownloadURL(storageRef);
+            setIconUrl(url);
+            setMessage("アイコン画像をアップロードしました。保存ボタンで変更を確定してください。");
+        } catch (err) {
+            setMessage("画像のアップロードに失敗しました。");
+            console.error(err);
+        }
     };
 
     // プロフィール保存
@@ -131,7 +137,7 @@ export default function Setting() {
                 <h1 className="text-2xl font-bold text-center text-black mb-2">プロフィール設定</h1>
                 <div className="w-full flex flex-col items-center mb-2">
                     {iconUrl && (
-                        <img src={iconUrl} alt="icon" className="rounded-full mb-2" style={{ width: 80, height: 80, objectFit: "cover" }} />
+                        <Image src={iconUrl} alt="icon" className="rounded-full mb-2" width={80} height={80} style={{ objectFit: "cover" }} />
                     )}
                     <input
                         type="file"
@@ -192,14 +198,14 @@ export default function Setting() {
             {/* メールアドレス変更トグル */}
             <button
                 type="button"
-                className="flex items-center gap-2 text-gray-500 font-medium mt-4"
+                className="flex items-center gap-2 text-gray-500 font-medium"
                 onClick={() => setShowEmailForm(v => !v)}
             >
                 <span className={`transition-transform ${showEmailForm ? 'rotate-90' : ''}`}>{'>'}</span>
                 <span>メールアドレス変更はこちら</span>
             </button>
             {showEmailForm && (
-                <form onSubmit={handleEmailChange} className="flex flex-col gap-2 mt-2 p-4 rounded-lg bg-white shadow w-full max-w-md">
+                <form onSubmit={handleEmailChange} className="flex flex-col gap-2 p-4 rounded-lg bg-white shadow w-full max-w-md">
                     <label>メールアドレス変更</label>
                     <input
                         className="px-4 py-2 focus:outline-none border rounded"
