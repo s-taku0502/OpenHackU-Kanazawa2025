@@ -57,7 +57,7 @@ export default function SignUp() {
                 />
                 <button type="submit">サインアップ</button>
                 <div>{message}</div>
-                <a href="/signin">サインイン</a>
+                <a href="/login">サインイン</a>
             </form>
         </div>
     );
