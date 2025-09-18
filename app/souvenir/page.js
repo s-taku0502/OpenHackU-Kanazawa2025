@@ -110,7 +110,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 relative">
+    <div className="min-h-screen bg-orange-100 relative">
       <header className="flex items-center justify-between p-4 bg-white border-b border-gray-200">
         <div className="w-10 h-10 relative">
           <Image

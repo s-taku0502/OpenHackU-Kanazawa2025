@@ -10,7 +10,7 @@ export default function TravelCard({ onOpenModal, trip }) {
     <div className="bg-white rounded-xl shadow-lg p-6 mx-4 my-6">
       <div className="flex justify-between items-center mb-4">
         <div className="flex items-center space-x-2">
-          <div className="w-10 h-10 relative rounded-full overflow-hidden bg-gray-300 flex-shrink-0">
+          <div className="w-10 h-10 relative rounded-full overflow-hidden flex-shrink-0">
             <Image
               src={'/file.svg'}
               alt="旅行者アイコン"

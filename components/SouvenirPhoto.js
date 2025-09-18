@@ -28,7 +28,7 @@ export default function SouvenirPhoto() {
         <div key={souvenir.id} className="bg-white rounded-xl shadow-lg p-6 flex flex-col font-sans">
           <div className="flex justify-between items-center mb-4 text-gray-500 text-sm">
             <div className="flex items-center space-x-2">
-              <div className="w-10 h-10 relative rounded-full overflow-hidden bg-gray-300 flex-shrink-0">
+              <div className="w-10 h-10 relative rounded-full overflow-hidden flex-shrink-0">
                 <Image
                   src={souvenir.travelerImage}
                   alt="旅行者アイコン"
