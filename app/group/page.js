@@ -56,7 +56,7 @@ export default function GroupPage() {
           }
         }
       } else {
-        router.push("/signin");
+        router.push("/login");
       }
     });
     return () => unsubscribe();
