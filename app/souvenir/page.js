@@ -148,7 +148,7 @@ export default function Home() {
           </div>
         )}
       </main>
-      
+
       {activeTab === '予定' && (
         <div className="fixed bottom-6 right-6 z-10">
           <button
@@ -182,8 +182,9 @@ export default function Home() {
           </div>
         </div>
       )}
+
       {isTripModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-end justify-center">
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div
             className="absolute inset-0 bg-black opacity-50"
             onClick={handleCloseTripModal}
@@ -197,13 +198,14 @@ export default function Home() {
           </div>
         </div>
       )}
+
       {isSouvenirModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-end justify-center">
+        <div className="fixed inset-0 z-50 flex items-start justify-center">
           <div
             className="absolute inset-0 bg-black opacity-50"
             onClick={handleCloseSouvenirModal}
           ></div>
-          <div className="relative w-full h-auto max-w-lg bg-white rounded-t-3xl shadow-lg transform transition-transform duration-300 ease-out translate-y-0">
+          <div className="relative w-full h-auto max-w-lg bg-white rounded-b-3xl shadow-lg transform transition-transform duration-300 ease-out translate-y-0">
             <SouvenirAddForm onCloseModal={handleCloseSouvenirModal} />
           </div>
         </div>
