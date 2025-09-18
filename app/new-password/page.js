@@ -111,13 +111,13 @@ const App = () => {
             >
               続行
             </button>
-            <a href="/" className="block mt-4 text-blue-500 hover:underline">ホームに戻る</a>
+            <Link href="/" className="block mt-4 text-blue-500 hover:underline">ホームに戻る</Link>
           </div>
         ) : !isCodeValid ? (
           <div className="text-center">
             <h2 className="text-2xl font-bold mb-4">パスワードの再設定をもう一度お試しください</h2>
             <p className="text-sm md:text-base">{message}</p>
-            <a href="/" className="block mt-4 text-blue-500 hover:underline">ホームに戻る</a>
+            <Link href="/" className="block mt-4 text-blue-500 hover:underline">ホームに戻る</Link>
           </div>
         ) : (
           <>
