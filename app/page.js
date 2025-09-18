@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import TravelCard from '@/components/TravelCard';
 import GiftRequestForm from '@/components/GiftRequestForm';
 import TripCreateForm from '@/components/TripCreateForm';
@@ -26,37 +26,54 @@ export default function Home() {
   const router = useRouter();
   const [isSouvenirModalOpen, setIsSouvenirModalOpen] = useState(false);
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      if (currentUser) {
-        setUser(currentUser);
-        const userDocRef = doc(db, "users", currentUser.uid);
-        const userDocSnap = await getDoc(userDocRef);
-        if (userDocSnap.exists() && userDocSnap.data().applying_groupId) {
-          const groupId = userDocSnap.data().applying_groupId;
-          const q = query(collection(db, "trips"), where("groupId", "==", groupId));
-          const querySnapshot = await getDocs(q);
-          const tripsData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-          const tripsWithTravelerNames = await Promise.all(
-            tripsData.map(async (trip) => {
-              if (trip.travelerUid) {
-                const travelerDocRef = doc(db, "users", trip.travelerUid);
-                const travelerDocSnap = await getDoc(travelerDocRef);
-                if (travelerDocSnap.exists()) {
-                  return { ...trip, travelerName: travelerDocSnap.data().name };
-                }
+
+  // 旅行データ取得ロジックを共通化
+  const fetchTrips = useCallback(async () => {
+    if (!user) return;
+    try {
+      const userDocRef = doc(db, "users", user.uid);
+      const userDocSnap = await getDoc(userDocRef);
+      if (userDocSnap.exists() && userDocSnap.data().applying_groupId) {
+        const groupId = userDocSnap.data().applying_groupId;
+        const q = query(collection(db, "trips"), where("groupId", "==", groupId));
+        const querySnapshot = await getDocs(q);
+        const tripsData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        const tripsWithTravelerNames = await Promise.all(
+          tripsData.map(async (trip) => {
+            if (trip.travelerUid) {
+              const travelerDocRef = doc(db, "users", trip.travelerUid);
+              const travelerDocSnap = await getDoc(travelerDocRef);
+              if (travelerDocSnap.exists()) {
+                return { ...trip, travelerName: travelerDocSnap.data().name };
               }
-              return { ...trip, travelerName: '不明なユーザー' };
-            })
-          );
-          setTrips(tripsWithTravelerNames);
-        }
-      } else {
+            }
+            return { ...trip, travelerName: '不明なユーザー' };
+          })
+        );
+        setTrips(tripsWithTravelerNames);
+      }
+    } catch (error) {
+      console.error("Failed to fetch trips:", error);
+    }
+  }, [user]);
+
+  // 認証状態を監視
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser || null);
+      if (!currentUser) {
         router.push("/signin");
       }
     });
     return () => unsubscribe();
   }, [auth, router]);
+
+  // userが確定したらデータ取得
+  useEffect(() => {
+    if (user) {
+      fetchTrips();
+    }
+  }, [user, fetchTrips]);
 
   const handleOpenModal = (tripId) => {
     setSelectedTripId(tripId);
@@ -84,29 +101,9 @@ export default function Home() {
     setIsSouvenirModalOpen(false);
   };
 
-  const handleTripCreated = async () => {
-    if (!user) return;
-    const userDocRef = doc(db, "users", user.uid);
-    const userDocSnap = await getDoc(userDocRef);
-    if (userDocSnap.exists() && userDocSnap.data().applying_groupId) {
-      const groupId = userDocSnap.data().applying_groupId;
-      const q = query(collection(db, "trips"), where("groupId", "==", groupId));
-      const querySnapshot = await getDocs(q);
-      const tripsData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      const tripsWithTravelerNames = await Promise.all(
-        tripsData.map(async (trip) => {
-          if (trip.travelerUid) {
-            const travelerDocRef = doc(db, "users", trip.travelerUid);
-            const travelerDocSnap = await getDoc(travelerDocRef);
-            if (travelerDocSnap.exists()) {
-              return { ...trip, travelerName: travelerDocSnap.data().name };
-            }
-          }
-          return { ...trip, travelerName: '不明なユーザー' };
-        })
-      );
-      setTrips(tripsWithTravelerNames);
-    }
+  // 旅行作成後のリスト再取得も共通関数で
+  const handleTripCreated = () => {
+    fetchTrips();
   };
 
   // ...existing code...
