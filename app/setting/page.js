@@ -105,6 +105,14 @@ export default function Setting() {
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen" style={{ backgroundColor: "#FFF7EE" }}>
+            <button
+                type="button"
+                className="self-start ml-4 mt-4 px-4 py-2 rounded-full bg-gray-200 text-gray-700 font-medium hover:bg-gray-300 transition"
+                onClick={() => router.push("/")}
+                style={{ position: "absolute", top: 16, left: 16 }}
+            >
+                ← 戻る
+            </button>
             <form
                 onSubmit={handleSubmit}
                 className="flex flex-col gap-4 p-8 rounded-lg bg-transparent items-center justify-center"
