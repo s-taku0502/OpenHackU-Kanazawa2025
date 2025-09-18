@@ -79,7 +79,7 @@ export default function SignIn() {
                 <div>
                     <button
                         type="submit"
-                        className="px-6 py-2 mx-8 text-white font-bold hover:opacity-90 transition mx-auto block"
+                        className="px-6 py-2 mx-8 text-black font-bold hover:opacity-90 transition mx-auto block"
                         style={{
                             borderRadius: "25px",
                             background: "#FF9F1C",

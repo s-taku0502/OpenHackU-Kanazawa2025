@@ -123,7 +123,7 @@ export default function Contact() {
 				<div className="w-full">
 					<button
 						type="submit"
-						className={`px-6 py-2 text-white font-bold transition mx-auto block w-full ${!isFormFilled ? 'grayscale opacity-60 cursor-not-allowed' : 'hover:opacity-90'}`}
+						className={`px-6 py-2 text-black font-bold transition mx-auto block w-full ${!isFormFilled ? 'grayscale opacity-60 cursor-not-allowed' : 'hover:opacity-90'}`}
 						style={{
 							borderRadius: "25px",
 							background: "#FF9F1C",

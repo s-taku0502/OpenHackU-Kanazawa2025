@@ -27,7 +27,7 @@ const SearchResultPage = ({ group, onBack, onJoin, message, setMessage }) => {
                 {group && (
                     <button
                         onClick={handleJoinClick}
-                        className="w-full py-3 px-6 rounded-full text-white font-bold bg-orange-500 hover:bg-orange-600 focus:outline-none"
+                        className="w-full py-3 px-6 rounded-full text-black font-bold bg-orange-500 hover:bg-orange-600 focus:outline-none"
                     >
                         参加
                     </button>
@@ -37,7 +37,7 @@ const SearchResultPage = ({ group, onBack, onJoin, message, setMessage }) => {
             <div className="w-full max-w-sm p-4">
                 <button
                     onClick={onBack}
-                    className="w-full py-3 px-6 rounded-full text-white font-bold bg-gray-500 hover:bg-gray-600 focus:outline-none"
+                    className="w-full py-3 px-6 rounded-full text-black font-bold bg-gray-500 hover:bg-gray-600 focus:outline-none"
                 >
                     戻る
                 </button>

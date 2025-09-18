@@ -50,7 +50,7 @@ export default function TravelCard({ onOpenModal, trip }) {
       <div className="mt-6 text-center">
         <button
           onClick={onOpenModal}
-          className="bg-orange-500 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-orange-600 transition-colors"
+          className="bg-orange-500 text-black font-bold py-3 px-8 rounded-full shadow-lg hover:bg-orange-600 transition-colors"
         >
           お願いする
         </button>

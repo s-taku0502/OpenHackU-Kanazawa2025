@@ -74,10 +74,10 @@ export default function SouvenirPhoto() {
           <div className="flex justify-end mt-4">
             <button
               onClick={() => handleDelete(souvenir.id)}
-              className="flex items-center space-x-1 px-4 py-2 bg-orange-500 text-white rounded-full text-sm hover:bg-orange-600 transition-colors"
+              className="flex items-center space-x-1 px-4 py-2 bg-orange-500 text-black rounded-full text-sm hover:bg-orange-600 transition-colors"
             >
               <span>削除</span>
-              <span><MdDelete className="text-xl text-white" /></span>
+              <span><MdDelete className="text-xl text-black" /></span>
             </button>
           </div>
         </div>

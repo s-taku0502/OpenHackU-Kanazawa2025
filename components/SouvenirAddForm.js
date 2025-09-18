@@ -204,7 +204,7 @@ export default function SouvenirAddForm({ onCloseModal }) {
 
           <button
             type="submit"
-            className="w-full bg-orange-500 text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:bg-orange-600 transition duration-300 transform focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-opacity-50"
+            className="w-full bg-orange-500 text-black font-bold py-3 px-6 rounded-lg shadow-lg hover:bg-orange-600 transition duration-300 transform focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-opacity-50"
           >
             登録
           </button>

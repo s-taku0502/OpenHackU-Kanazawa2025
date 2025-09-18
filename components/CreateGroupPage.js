@@ -41,7 +41,7 @@ const CreateGroupPage = ({ onBack, onCreateGroup, message, setMessage }) => {
                     {/* 制作ボタン */}
                     <button
                         type="submit"
-                        className="w-full py-3 px-6 mt-8 rounded-full text-white font-bold bg-orange-500 hover:bg-orange-600 focus:outline-none"
+                        className="w-full py-3 px-6 mt-8 rounded-full text-black font-bold bg-orange-500 hover:bg-orange-600 focus:outline-none"
                     >
                         作成
                     </button>
@@ -51,7 +51,7 @@ const CreateGroupPage = ({ onBack, onCreateGroup, message, setMessage }) => {
             <div className="w-full max-w-sm p-4">
                 <button
                     onClick={onBack}
-                    className="w-full py-3 px-6 rounded-full text-white font-bold bg-gray-500 hover:bg-gray-600 focus:outline-none"
+                    className="w-full py-3 px-6 rounded-full text-black font-bold bg-gray-500 hover:bg-gray-600 focus:outline-none"
                 >
                     戻る
                 </button>
