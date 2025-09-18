@@ -1,11 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { initializeApp, getApps, getApp } from 'firebase/app';
-import { getAuth, signInAnonymously, onAuthStateChanged } from 'firebase/auth';
-import { getFirestore, collection, addDoc, serverTimestamp, doc, getDoc } from 'firebase/firestore';
+import { useState } from 'react';
+// Firebaseの初期化関連のインポートを削除
+import { collection, addDoc, serverTimestamp, doc, getDoc } from 'firebase/firestore';
+// アプリ全体で共有されるdbインスタンスをインポート
+import { db } from '@/app/firebase';
 
-export default function TripCreateForm({ onCloseModal, onTripCreated }) {
+// propsとしてuserを受け取るように変更
+export default function TripCreateForm({ onCloseModal, onTripCreated, user }) {
   const [destination, setDestination] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
@@ -13,37 +15,11 @@ export default function TripCreateForm({ onCloseModal, onTripCreated }) {
   const [deadline, setDeadline] = useState('');
   const [comment, setComment] = useState('');
   const [message, setMessage] = useState('');
-  const [db, setDb] = useState(null);
-  const [user, setUser] = useState(null);
-  const [isAuthReady, setIsAuthReady] = useState(false);
-
-  useEffect(() => {
-    try {
-      const app = !getApps().length ? initializeApp(JSON.parse(__firebase_config)) : getApp();
-      const authInstance = getAuth(app);
-      const firestoreInstance = getFirestore(app);
-      setDb(firestoreInstance);
-
-      const unsubscribe = onAuthStateChanged(authInstance, async (currentUser) => {
-        if (currentUser) {
-          setUser(currentUser);
-        } else {
-          await signInAnonymously(authInstance);
-        }
-        setIsAuthReady(true);
-      });
-
-      return () => unsubscribe();
-    } catch (error) {
-      console.error("Firebase Initialization Error:", error);
-      setIsAuthReady(true);
-    }
-  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!user || !db) {
-      setMessage('認証またはデータベースが利用できません。');
+    if (!user) {
+      setMessage('認証情報がありません。');
       return;
     }
 
@@ -78,16 +54,6 @@ export default function TripCreateForm({ onCloseModal, onTripCreated }) {
       setMessage('登録に失敗しました。時間をおいて再度お試しください。');
     }
   };
-
-  if (!isAuthReady) {
-    return (
-      <div className="flex flex-col items-center justify-center p-4 min-h-screen bg-gray-100">
-        <div className="w-full max-w-sm bg-white rounded-lg shadow-md p-6 relative">
-          <p className="text-lg text-gray-700 font-medium text-center">読み込み中...</p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="flex flex-col items-center justify-start min-h-screen bg-white">
