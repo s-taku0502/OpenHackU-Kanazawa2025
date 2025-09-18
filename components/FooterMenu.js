@@ -9,7 +9,7 @@ const FooterMenu = ({ onCreateClick, onJoinClick }) => {
         onClick={onCreateClick}
       >
         <FaPlus className="text-xl text-gray-600" />
-        <p className="font-semibold text-gray-800">新規グループ制作</p>
+        <p className="font-semibold text-gray-800">新規グループ作成</p>
       </div>
 
       {/* 既存のグループに加入 */}

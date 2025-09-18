@@ -34,7 +34,6 @@ const SearchResultPage = ({ group, onBack, onJoin, message, setMessage }) => {
                 )}
             </div>
 
-            {/* 修正箇所: ここに戻るボタンを追加 */}
             <div className="w-full max-w-sm p-4">
                 <button
                     onClick={onBack}
