@@ -1,13 +1,11 @@
 import { FaCamera } from 'react-icons/fa';
 import { useState } from 'react';
 
-// propsにmessageとsetMessageを追加
 const CreateGroupPage = ({ onBack, onCreateGroup, message, setMessage }) => {
     const [groupName, setGroupName] = useState("");
 
     const handleCreateClick = (e) => {
-        e.preventDefault(); // フォームのデフォルト動作をキャンセル
-        // 制作ボタンを押す前にメッセージをクリア
+        e.preventDefault();
         setMessage("");
         onCreateGroup(groupName);
     };
@@ -42,10 +40,10 @@ const CreateGroupPage = ({ onBack, onCreateGroup, message, setMessage }) => {
 
                     {/* 制作ボタン */}
                     <button
-                        type="submit" // formのsubmitボタンに設定
+                        type="submit"
                         className="w-full py-3 px-6 mt-8 rounded-full text-white font-bold bg-orange-500 hover:bg-orange-600 focus:outline-none"
                     >
-                        制作
+                        作成
                     </button>
                 </form>
             </div>

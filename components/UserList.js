@@ -17,9 +17,8 @@ const UserList = ({ users, appliedGroupId, onApplyGroup }) => {
             >
               <div className="w-10 h-10 bg-gray-300 rounded-full flex-shrink-0"></div>
               <div>
-                <div className="flex items-center space-x-2"> {/* 追加: flexコンテナで名前とテキストを並べる */}
+                <div className="flex items-center space-x-2">
                   <p className="font-semibold text-gray-800">{group.name}</p>
-                  {/* ★修正箇所: 選択中の場合にのみ「選択中」を表示 */}
                   {group.id === appliedGroupId && (
                     <span className="text-xs text-orange-500 font-bold">選択中</span>
                   )}
