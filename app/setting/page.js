@@ -1,5 +1,5 @@
 "use client";
-import { getAuth, updateEmail, updatePassword } from "firebase/auth";
+import { getAuth, onAuthStateChanged, updateEmail, updatePassword } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db, storage } from "../firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -8,21 +8,32 @@ import { useRouter } from "next/navigation";
 
 export default function Setting() {
     const auth = getAuth();
-    const user = auth.currentUser;
     const router = useRouter();
-
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
     const [name, setName] = useState("");
     const [bio, setBio] = useState("");
     const [iconUrl, setIconUrl] = useState("");
     const [iconFile, setIconFile] = useState(null);
     const [message, setMessage] = useState("");
-    const [email, setEmail] = useState(user?.email || "");
+    const [email, setEmail] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [emailMsg, setEmailMsg] = useState("");
     const [pwMsg, setPwMsg] = useState("");
     const [showEmailForm, setShowEmailForm] = useState(false);
     const [showPwForm, setShowPwForm] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+            setUser(firebaseUser);
+            setLoading(false);
+            if (!firebaseUser) {
+                router.push("/login");
+            }
+        });
+        return () => unsubscribe();
+    }, [auth, router]);
 
     useEffect(() => {
         if (!user) return;
@@ -34,18 +45,17 @@ export default function Setting() {
                 setName(data.name || "");
                 setBio(data.bio || "");
                 setIconUrl(data.personal_image || "");
+                setEmail(user.email);
             }
         };
         fetchProfile();
     }, [user]);
 
-    useEffect(() => {
-        if (auth && !user) {
-            router.push("/login");
-        }
-    }, [auth, user, router]);
+    if (loading) {
+        return <div className="flex justify-center items-center h-screen">認証確認中...</div>;
+    }
     if (!user) {
-        return <div className="flex justify-center items-center h-screen"></div>;
+        return null; // ログイン画面へリダイレクト中
     }
 
     const isFormFilled = name && bio;

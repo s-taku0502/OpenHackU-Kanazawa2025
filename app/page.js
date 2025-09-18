@@ -1,9 +1,11 @@
 "use client"
-import { getAuth, onAuthStateChanged, signOut} from "firebase/auth";
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "./firebase";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { Linden_Hill } from "next/font/google";
+import Link from "next/link";
 
 export default function Home() {
   const auth = getAuth();
@@ -28,10 +30,10 @@ export default function Home() {
     });
     return () => unsubscribe();
   }, [auth, router]);
-  
+
   const handleSignOut = () => {
     signOut(auth).then(() => {
-    // Sign-out successful.
+      // Sign-out successful.
     }).catch((error) => {
       console.error("サインアウトエラー:", error);
       alert(`サインアウトに失敗しました: ${error.message}`);
@@ -40,11 +42,14 @@ export default function Home() {
 
   return (
     <div>
-      <h1>ホーム(仮)</h1>
-      <p>名前：{name}</p>
-      <p>メールアドレス：{email}</p>
-      <p>UID：{uid}</p>
-      <button onClick={handleSignOut}>サインアウト</button>
+      <div>
+        <h1>ホーム(仮)</h1>
+        <p>名前：{name}</p>
+        <p>メールアドレス：{email}</p>
+        <p>UID：{uid}</p>
+        <button onClick={handleSignOut}>サインアウト</button>
+      </div>
+      <Link href="/setting">設定ページへ</Link>
     </div>
   );
 }
