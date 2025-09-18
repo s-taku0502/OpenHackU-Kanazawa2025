@@ -50,7 +50,9 @@ export default function SouvenirPhoto({ userUid }) {
   ]);
 
   const handleDelete = (id) => {
-    setSouvenirs((prev) => prev.filter((souvenir) => souvenir.id !== id));
+    if (window.confirm('本当に削除してよろしいですか？')) {
+      setSouvenirs((prev) => prev.filter((souvenir) => souvenir.id !== id));
+    }
   };
 
   return (
@@ -102,6 +104,16 @@ export default function SouvenirPhoto({ userUid }) {
             </div>
           </div>
 
+          {/* 誰でも削除ボタンを表示 */}
+          {/* <div className="flex justify-end mt-4">
+            <button
+              onClick={() => handleDelete(souvenir.id)}
+              className="flex items-center space-x-1 px-4 py-2 bg-orange-500 text-white rounded-full text-sm hover:bg-orange-600 transition-colors"
+            >
+              <span>削除</span>
+              <span><MdDelete className="text-xl text-white" /></span>
+            </button>
+          </div> */}
           {/* 投稿者のみ削除ボタンを表示 */}
           {userUid === souvenir.travelerUid && (
             <div className="flex justify-end mt-4">
