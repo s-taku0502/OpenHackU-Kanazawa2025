@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { initializeApp } from 'firebase/app';
 import { getAuth, confirmPasswordReset, verifyPasswordResetCode } from 'firebase/auth';
+import Link from "next/link";
 
 // Firebase設定を環境変数から取得
 const firebaseConfig = {
