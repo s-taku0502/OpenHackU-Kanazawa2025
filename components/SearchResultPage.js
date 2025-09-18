@@ -29,7 +29,7 @@ const SearchResultPage = ({ group, onBack, onJoin, message, setMessage }) => {
                         onClick={handleJoinClick}
                         className="w-full py-3 px-6 rounded-full text-white font-bold bg-orange-500 hover:bg-orange-600 focus:outline-none"
                     >
-                        加入
+                        参加
                     </button>
                 )}
             </div>

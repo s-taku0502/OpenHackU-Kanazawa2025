@@ -77,7 +77,7 @@ export default function GroupPage() {
         groupIds: arrayUnion(groupDocRef.id),
         applying_groupId: groupDocRef.id,
       });
-      setCreateMessage("グループ「${newGroupName}」を作成しました！");
+      setCreateMessage("");
 
       const newUserGroups = userGroups
         .filter((group) => group.id !== groupDocRef.id)
@@ -125,7 +125,7 @@ export default function GroupPage() {
     // Corrected getter here
     if (userGroups.some(group => group.id === groupId)) {
       // Corrected setter here
-      setJoinMessage("このグループにはすでに加入済みです。");
+      setJoinMessage("このグループにはすでに参加済みです。");
       setSearchedGroup(null);
       return;
     }

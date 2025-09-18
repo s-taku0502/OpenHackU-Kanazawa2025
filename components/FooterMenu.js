@@ -18,7 +18,7 @@ const FooterMenu = ({ onCreateClick, onJoinClick }) => {
         onClick={onJoinClick}
       >
         <FaReply className="text-xl text-gray-600" />
-        <p className="font-semibold text-gray-800">既存のグループに加入</p>
+        <p className="font-semibold text-gray-800">既存のグループに参加</p>
       </div>
     </footer>
   );
