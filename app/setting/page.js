@@ -205,17 +205,32 @@ export default function Setting() {
                 <span>メールアドレス変更はこちら</span>
             </button>
             {showEmailForm && (
-                <form onSubmit={handleEmailChange} className="flex flex-col gap-2 p-4 rounded-lg bg-white shadow w-full max-w-md">
-                    <label>メールアドレス変更</label>
+                <form onSubmit={handleEmailChange} className="flex flex-col gap-4 p-6 rounded-lg bg-white shadow w-full max-w-md items-center">
+                    <label className="w-full">メールアドレス変更</label>
                     <input
-                        className="px-4 py-2 focus:outline-none border rounded"
+                        className="px-4 py-2 focus:outline-none w-full"
+                        style={{
+                            borderRadius: "25px",
+                            border: "1px solid #EDEDED",
+                            background: "#FFF",
+                            blockSize: "35px",
+                        }}
                         type="email"
                         value={email}
                         onChange={e => setEmail(e.target.value)}
                         required
                     />
-                    <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded">メールアドレス変更</button>
-                    <div className="text-green-600">{emailMsg}</div>
+                    <button
+                        type="submit"
+                        className={`px-6 py-2 text-white font-bold transition mx-auto block w-full hover:opacity-90`}
+                        style={{
+                            borderRadius: "25px",
+                            background: "#FF9F1C",
+                        }}
+                    >
+                        メールアドレス変更
+                    </button>
+                    <div className="text-green-600 w-full text-center">{emailMsg}</div>
                 </form>
             )}
 
@@ -229,11 +244,11 @@ export default function Setting() {
                 <span>パスワード変更はこちら</span>
             </button>
             {showPwForm && (
-                <form onSubmit={handlePasswordChange} className="flex flex-col gap-2 mt-2 p-4 rounded-lg bg-white shadow w-full max-w-md">
-                    <label>パスワード変更</label>
-                    <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+                <form onSubmit={handlePasswordChange} className="flex flex-col gap-4 p-6 rounded-lg bg-white shadow w-full max-w-md items-center">
+                    <label className="w-full">パスワード変更</label>
+                    <div style={{ position: 'relative', display: 'flex', alignItems: 'center', width: '100%' }}>
                         <input
-                            className="px-4 py-2 focus:outline-none border rounded w-full pr-10"
+                            className="px-4 py-2 focus:outline-none w-full pr-10"
                             style={{
                                 borderRadius: "25px",
                                 border: "1px solid #EDEDED",
@@ -273,8 +288,17 @@ export default function Setting() {
                             )}
                         </button>
                     </div>
-                    <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded">パスワード変更</button>
-                    <div className="text-green-600">{pwMsg}</div>
+                    <button
+                        type="submit"
+                        className={`px-6 py-2 text-white font-bold transition mx-auto block w-full hover:opacity-90`}
+                        style={{
+                            borderRadius: "25px",
+                            background: "#FF9F1C",
+                        }}
+                    >
+                        パスワード変更
+                    </button>
+                    <div className="text-green-600 w-full text-center">{pwMsg}</div>
                 </form>
             )}
         </div>
