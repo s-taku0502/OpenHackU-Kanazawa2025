@@ -2,11 +2,9 @@
 import { getAuth, updateEmail, updatePassword } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db, storage } from "../firebase";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import Link from "next/link";
 
 export default function Setting() {
     const auth = getAuth();
@@ -26,7 +24,6 @@ export default function Setting() {
     const [showPwForm, setShowPwForm] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
 
-    // Firestoreからプロフィール情報を取得
     useEffect(() => {
         if (!user) return;
         const fetchProfile = async () => {
@@ -42,6 +39,17 @@ export default function Setting() {
         fetchProfile();
     }, [user]);
 
+    useEffect(() => {
+        if (auth && !user) {
+            router.push("/login");
+        }
+    }, [auth, user, router]);
+    if (!user) {
+        return <div className="flex justify-center items-center h-screen"></div>;
+    }
+
+    const isFormFilled = name && bio;
+
     // アイコン画像アップロード
     const handleIconChange = async (e) => {
         const file = e.target.files[0];
@@ -55,9 +63,12 @@ export default function Setting() {
     };
 
     // プロフィール保存
-    const handleSave = async (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!user) return;
+        if (!isFormFilled) {
+            setMessage("全ての項目を入力してください");
+            return;
+        }
         await setDoc(doc(db, "users", user.uid), {
             name,
             bio,
@@ -66,100 +77,111 @@ export default function Setting() {
         setMessage("プロフィールを保存しました");
     };
 
-    if (!user) {
-        return (
-            <div className="flex flex-col items-center justify-center min-h-screen">
-                <Link href="/login">ログインしてください</Link>
-            </div>
-        );
-    }
+    // メールアドレス変更
+    const handleEmailChange = async (e) => {
+        e.preventDefault();
+        setEmailMsg("");
+        if (!user) return;
+        try {
+            await updateEmail(user, email);
+            setEmailMsg("メールアドレスを変更しました");
+        } catch (err) {
+            setEmailMsg("メールアドレス変更エラー: " + err.message);
+        }
+    };
+
+    // パスワード変更
+    const handlePasswordChange = async (e) => {
+        e.preventDefault();
+        setPwMsg("");
+        if (!user) return;
+        try {
+            await updatePassword(user, newPassword);
+            setPwMsg("パスワードを変更しました");
+        } catch (err) {
+            setPwMsg("パスワード変更エラー: " + err.message);
+        }
+    };
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen" style={{ backgroundColor: "#FFF7EE" }}>
-            <h1 className="text-3xl font-bold mb-8">プロフィール設定</h1>
-            <form onSubmit={handleSave} className="flex flex-col gap-4 p-8 rounded-lg bg-transparent items-center justify-center">
-                <div className="flex flex-col items-center">
-                    <label className="mb-2">アイコン画像</label>
-                    <div className="w-20 h-20 relative rounded-full overflow-hidden bg-gray-200 mb-2">
-                        <Image
-                            src={iconUrl || "/file.svg"}
-                            alt="アイコン画像"
-                            fill
-                            style={{ objectFit: "cover" }}
-                            className="rounded-full"
-                            sizes="80px"
-                        />
-                    </div>
-                    <input type="file" accept="image/*" onChange={handleIconChange} />
-                </div>
-                <div>
-                    <label>ユーザー名</label>
+            <form
+                onSubmit={handleSubmit}
+                className="flex flex-col gap-4 p-8 rounded-lg bg-transparent items-center justify-center"
+                style={{ inlineSize: "100%", maxInlineSize: 500 }}
+            >
+                <h1 className="text-2xl font-bold text-center text-black mb-2">プロフィール設定</h1>
+                <div className="w-full flex flex-col items-center mb-2">
+                    {iconUrl && (
+                        <img src={iconUrl} alt="icon" className="rounded-full mb-2" style={{ width: 80, height: 80, objectFit: "cover" }} />
+                    )}
                     <input
-                        className="px-4 py-2 focus:outline-none"
+                        type="file"
+                        accept="image/*"
+                        onChange={handleIconChange}
+                        className="mb-2"
+                    />
+                </div>
+                <div className="w-full">
+                    <p>名前</p>
+                    <input
+                        className="px-4 py-2 focus:outline-none w-full"
                         style={{
                             borderRadius: "25px",
                             border: "1px solid #EDEDED",
                             background: "#FFF",
-                            height: "35px",
-                            width: "80vw",
-                            maxWidth: "500px",
+                            blockSize: "35px",
                         }}
                         type="text"
+                        placeholder="名前"
                         value={name}
-                        onChange={(e) => setName(e.target.value)}
+                        onChange={e => setName(e.target.value)}
                         required
                     />
                 </div>
-                <div>
-                    <label>自己紹介</label>
+                <div className="w-full">
+                    <p>自己紹介</p>
                     <textarea
-                        className="px-4 py-2 focus:outline-none"
+                        className="px-4 py-2 focus:outline-none w-full"
                         style={{
-                            borderRadius: "15px",
+                            borderRadius: "25px",
                             border: "1px solid #EDEDED",
                             background: "#FFF",
-                            width: "80vw",
-                            maxWidth: "500px",
-                            minHeight: "60px",
+                            minBlockSize: "100px",
                         }}
+                        placeholder="自己紹介を入力してください"
                         value={bio}
-                        onChange={(e) => setBio(e.target.value)}
+                        onChange={e => setBio(e.target.value)}
+                        required
                     />
                 </div>
-                <button
-                    type="submit"
-                    className="px-6 py-2 mx-8 text-white font-bold hover:opacity-90 transition mx-auto block"
-                    style={{
-                        borderRadius: "25px",
-                        background: "#FF9F1C",
-                    }}
-                >
-                    保存
-                </button>
-                <div className="text-green-600">{message}</div>
+                <div className="w-full">
+                    <button
+                        type="submit"
+                        className={`px-6 py-2 text-white font-bold transition mx-auto block w-full ${!isFormFilled ? 'grayscale opacity-60 cursor-not-allowed' : 'hover:opacity-90'}`}
+                        style={{
+                            borderRadius: "25px",
+                            background: "#FF9F1C",
+                        }}
+                        disabled={!isFormFilled}
+                    >
+                        保存
+                    </button>
+                </div>
+                {message && <div className="text-red-500">{message}</div>}
             </form>
 
             {/* メールアドレス変更トグル */}
             <button
                 type="button"
-                className="flex items-center gap-2 text-gray-500 font-medium"
+                className="flex items-center gap-2 text-gray-500 font-medium mt-4"
                 onClick={() => setShowEmailForm(v => !v)}
             >
                 <span className={`transition-transform ${showEmailForm ? 'rotate-90' : ''}`}>{'>'}</span>
                 <span>メールアドレス変更はこちら</span>
             </button>
             {showEmailForm && (
-                <form onSubmit={async (e) => {
-                    e.preventDefault();
-                    setEmailMsg("");
-                    if (!user) return;
-                    try {
-                        await updateEmail(user, email);
-                        setEmailMsg("メールアドレスを変更しました");
-                    } catch (err) {
-                        setEmailMsg("メールアドレス変更エラー: " + err.message);
-                    }
-                }} className="flex flex-col gap-2 mt-2 p-4 rounded-lg bg-white shadow w-full max-w-md">
+                <form onSubmit={handleEmailChange} className="flex flex-col gap-2 mt-2 p-4 rounded-lg bg-white shadow w-full max-w-md">
                     <label>メールアドレス変更</label>
                     <input
                         className="px-4 py-2 focus:outline-none border rounded"
@@ -183,17 +205,7 @@ export default function Setting() {
                 <span>パスワード変更はこちら</span>
             </button>
             {showPwForm && (
-                <form onSubmit={async (e) => {
-                    e.preventDefault();
-                    setPwMsg("");
-                    if (!user) return;
-                    try {
-                        await updatePassword(user, newPassword);
-                        setPwMsg("パスワードを変更しました");
-                    } catch (err) {
-                        setPwMsg("パスワード変更エラー: " + err.message);
-                    }
-                }} className="flex flex-col gap-2 mt-2 p-4 rounded-lg bg-white shadow w-full max-w-md">
+                <form onSubmit={handlePasswordChange} className="flex flex-col gap-2 mt-2 p-4 rounded-lg bg-white shadow w-full max-w-md">
                     <label>パスワード変更</label>
                     <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
                         <input
@@ -203,9 +215,6 @@ export default function Setting() {
                                 border: "1px solid #EDEDED",
                                 background: "#FFF",
                                 blockSize: "35px",
-                                alignSelf: "stretch",
-                                inlineSize: "80vw",
-                                maxInlineSize: "500px",
                             }}
                             type={showPassword ? "text" : "password"}
                             placeholder="新しいパスワード"
@@ -218,7 +227,7 @@ export default function Setting() {
                             onClick={() => setShowPassword((prev) => !prev)}
                             style={{
                                 position: 'absolute',
-                                insetInlineEnd: 12,
+                                right: 12,
                                 background: 'none',
                                 border: 'none',
                                 padding: 0,
