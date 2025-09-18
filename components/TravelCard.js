@@ -7,8 +7,9 @@ export default function TravelCard({ onOpenModal, trip }) {
   return (
     <div className="bg-white rounded-xl shadow-lg p-6 mx-4 my-6">
       <div className="flex justify-between items-center mb-4">
+        {/* アイコン */}
         <div className="w-10 h-10 bg-gray-300 rounded-full"></div>
-        <p>{trip.travelerName}</p>
+        <p className="text-black">{trip.travelerName}</p>
         <span className="text-sm text-gray-500">{formatDate(trip.createdAt)}</span>
       </div>
       <div className="space-y-4 text-gray-700">

@@ -4,11 +4,14 @@ import { useState } from 'react';
 import { db } from '../app/firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
+import { MdDateRange } from "react-icons/md";
 
 export default function GiftRequestForm({ onCloseModal, tripId }) {
   const [souvenirName, setSouvenirName] = useState('');
   const [comment, setComment] = useState('');
   const [message, setMessage] = useState('');
+  const [showAiSuggestion, setShowAiSuggestion] = useState(false);
+  const [showButton, setShowButton] = useState(true);
   const auth = getAuth();
 
   const handleSubmit = async (e) => {
@@ -34,27 +37,44 @@ export default function GiftRequestForm({ onCloseModal, tripId }) {
     }
   };
 
+  const handleShowAiSuggestion = () => {
+    setShowAiSuggestion(true);
+    setShowButton(false);
+  };
+
+  const handleHideAiSuggestion = () => {
+    setShowAiSuggestion(false);
+    setShowButton(true);
+  };
+
   return (
     <div className="flex flex-col items-center justify-center p-4 min-h-screen bg-gray-100">
-      <div className="w-full max-w-lg bg-white rounded-lg shadow-md p-6">
+      <div className="w-full max-w-lg bg-white rounded-lg shadow-md p-6 relative">
+        <button
+          onClick={onCloseModal}
+          className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 transition duration-300"
+          aria-label="Close"
+        >
+          <span><MdDateRange viewBox="0 0 320 512" fill="currentColor" className="h-6 w-6" /></span>
+        </button>
+        <div className="flex justify-center mb-6">
+          <div className="w-20 h-20 bg-gray-300 rounded-full"></div>
+        </div>
         <form onSubmit={handleSubmit}>
-          <div className="flex justify-center mb-6">
-            <div className="w-20 h-20 bg-gray-300 rounded-full"></div>
-          </div>
           <div className="mb-4">
-            <label htmlFor="item" className="block text-gray-700 font-semibold mb-2">旅行予定地</label>
-            <input 
-              type="text" 
-              id="tripLocation" 
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-black" 
+            <label htmlFor="tripLocation" className="block text-gray-700 font-semibold mb-2">旅行予定地</label>
+            <input
+              type="text"
+              id="tripLocation"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-black"
             />
           </div>
           <div className="mb-4">
             <label htmlFor="item" className="block text-gray-700 font-semibold mb-2">希望の物</label>
-            <input 
-              type="text" 
-              id="item" 
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-black" 
+            <input
+              type="text"
+              id="item"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-black"
               placeholder="例：〇〇のチーズケーキ"
               value={souvenirName}
               onChange={(e) => setSouvenirName(e.target.value)}
@@ -63,23 +83,38 @@ export default function GiftRequestForm({ onCloseModal, tripId }) {
           </div>
           <div className="mb-6">
             <label htmlFor="comment" className="block text-gray-700 font-semibold mb-2">コメント</label>
-            <textarea 
-              id="comment" 
-              className="w-full h-32 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 resize-none text-black" 
+            <textarea
+              id="comment"
+              className="w-full h-20 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 resize-none text-black"
               placeholder="お土産に関するコメントがあればどうぞ"
               value={comment}
               onChange={(e) => setComment(e.target.value)}
             ></textarea>
           </div>
-          <div className="mb-6">
-              <div className="relative top-[-10px] left-1/2 transform -translate-x-1/2 z-10">
-                  <div className="bg-orange-400 text-white text-xs px-4 py-2 rounded-full shadow-md relative bubble-top">
-                      AIにお土産を提案してもらう
-                  </div>
+          
+          {showButton && (
+            <div className="flex justify-start mb-6">
+              <button
+                type="button"
+                onClick={handleShowAiSuggestion}
+                className="bg-orange-400 text-white text-xs px-4 py-2 rounded-lg shadow-md relative bubble"
+              >
+                AIにお土産を提案してもらう
+              </button>
+            </div>
+          )}
+
+          {showAiSuggestion && (
+            <div className="relative mb-6" onClick={handleHideAiSuggestion}>
+              <div className="bg-white border border-orange-400 text-sm p-4 rounded-lg shadow-md relative bubble-bottom-left">
+                <p>お土産A</p>
+                <p>お土産B</p>
               </div>
-          </div>
+            </div>
+          )}
+
           {message && <p>{message}</p>}
-          <button 
+          <button
             type="submit"
             className="w-full bg-orange-500 text-white font-bold py-3 rounded-full shadow-lg hover:bg-orange-600 transition-colors"
           >

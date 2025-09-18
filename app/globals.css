@@ -1,18 +1,8 @@
 @import "tailwindcss";
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 
-/* :root {
+:root {
   --background: #ffffff;
   --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -28,14 +18,8 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-.bubble-top {
+.bubble {
   position: relative;
-  padding: 10px 15px;
-  background-color: theme('colors.orange.400');
-  color: white;
-  border-radius: 20px;
-  font-size: 0.75rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .bubble-top::before {
@@ -50,4 +34,28 @@ body {
   border-top: 10px solid theme('colors.orange.400'); 
   -webkit-transform: rotate(45deg);
   transform: rotate(45deg);
-} */
+}
+
+.bubble::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left:10%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 10px solid theme('colors.orange.400');
+}
+
+.bubble-bottom-left::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 10px solid theme('colors.orange.400');
+}
