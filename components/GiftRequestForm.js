@@ -5,6 +5,7 @@ import { db } from '../app/firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import { MdClose } from "react-icons/md";
+import Image from 'next/image'; // 1. next/imageをインポート
 
 export default function GiftRequestForm({ onCloseModal, tripId }) {
   const [souvenirName, setSouvenirName] = useState('');
@@ -58,7 +59,17 @@ export default function GiftRequestForm({ onCloseModal, tripId }) {
           <span><MdClose className="h-6 w-6" /></span>
         </button>
         <div className="flex justify-center mb-6">
-          <div className="w-20 h-20 bg-gray-300 rounded-full"></div>
+          {/* 2. divをImageコンポーネントに置き換えます */}
+          <div className="w-20 h-20 relative rounded-full overflow-hidden">
+            <Image
+              src="/file.svg" // アイコンのパスを指定
+              alt="User Icon"
+              fill // 親要素に合わせてサイズを自動調整
+              className="rounded-full" // スタイルを適用
+              sizes="80px"
+              priority
+            />
+          </div>
         </div>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
