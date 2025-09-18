@@ -10,20 +10,36 @@ export default function Contact() {
 
 	const isFormFilled = type && nickname && email && content;
 
-	const handleSubmit = (e) => {
+	const handleSubmit = async (e) => {
 		e.preventDefault();
 		// バリデーション（メール形式チェックなどは省略）
 		if (!isFormFilled) {
 			setMessage("全ての項目を入力してください");
 			return;
 		}
-		// ここで送信処理（API連携等）を実装
-		alert("お問い合わせを送信しました。ありがとうございました！");
-		setType("");
-		setNickname("");
-		setEmail("");
-		setContent("");
-		setMessage("");
+		setMessage("送信中...");
+
+		try {
+			const res = await fetch("/api/contact", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ type, nickname, email, content }),
+			});
+
+			if (res.ok) {
+				// alertの代わりにsetMessageを使用
+				setMessage("お問い合わせを送信しました。ありがとうございました！");
+				setType("");
+				setNickname("");
+				setEmail("");
+				setContent("");
+			} else {
+				setMessage("送信に失敗しました。時間をおいて再度お試しください。");
+			}
+		} catch (error) {
+			console.error("Contact form submission error:", error);
+			setMessage("送信中にエラーが発生しました。ネットワーク接続を確認して再度お試しください。");
+		}
 	};
 
 	return (
