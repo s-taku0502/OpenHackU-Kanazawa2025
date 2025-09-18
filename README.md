@@ -6,6 +6,10 @@ npm install
 ```bash
 npm run dev
 ```
+Reactでアイコンを利用する
+```bash
+npm install react-icons
+```
 [http://localhost:3000](http://localhost:3000) に接続
 
 ## 開発フロー（重要）
