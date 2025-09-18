@@ -145,11 +145,6 @@ export default function SouvenirAddForm({ onCloseModal }) {
                 <span className="text-sm text-gray-600 truncate max-w-[150px]">{selectedImage.name}</span>
               )}
             </div>
-            {previewUrl && (
-              <div className="mt-4">
-                <img src={previewUrl} alt="Image Preview" className="w-32 h-32 object-cover rounded-lg shadow-md mx-auto" />
-              </div>
-            )}
           </div>
 
           <div>
@@ -163,7 +158,7 @@ export default function SouvenirAddForm({ onCloseModal }) {
               className="px-4 py-2 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-orange-500 transition duration-300 caret-black text-black"
             />
           </div>
-          
+
           <div className="flex space-x-4">
             <div className="flex-1">
               <label htmlFor="expiration" className="text-sm font-medium text-gray-700 block mb-1">賞味期限</label>
@@ -186,7 +181,7 @@ export default function SouvenirAddForm({ onCloseModal }) {
               />
             </div>
           </div>
-          
+
           <div>
             <label htmlFor="location" className="text-sm font-medium text-gray-700 block mb-1">設置場所</label>
             <input
