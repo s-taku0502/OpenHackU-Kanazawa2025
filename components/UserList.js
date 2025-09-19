@@ -3,7 +3,7 @@ import React from 'react';
 const UserList = ({ users, appliedGroupId, onApplyGroup }) => {
   return (
     <div className="max-h-[calc(100vh-160px)] overflow-y-auto rounded-lg shadow-md bg-gray-100 p-4"> 
-      <h2 className="text-xl font-bold mb-4 text-gray-800">参加中のグループ</h2>
+      <h2 className="text-xl text-center font-bold mb-4 text-gray-800">参加中のグループ</h2>
       {users.length === 0 ? (
         <p className="text-gray-600">まだ参加しているグループはありません。</p>
       ) : (

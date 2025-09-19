@@ -206,14 +206,16 @@ export default function GroupPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white text-gray-800">
-      <button
-        className="fixed bottom-25 left-4 z-50 px-4 py-2 rounded-full bg-gray-200 text-gray-700 font-medium hover:bg-gray-300 transition"
-        onClick={() => router.back()}
-      >
-        ← 戻る
-      </button>
+    <div className="min-h-screen bg-white text-gray-800" style={{ position: 'relative' }}>
       <main className="p-4">
+        <button
+          type="button"
+          className="self-start ml-4 mt-4 px-4 py-2 rounded-full bg-gray-200 text-gray-700 font-medium hover:bg-gray-300 transition"
+          onClick={() => router.back()}
+          style={{ position: "absolute", top: 16, left: 16 }}
+        >
+          ← 戻る
+        </button>
         <UserList users={userGroups.map(group => ({
           id: group.id,
           name: group.name,
