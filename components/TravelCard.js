@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { MdDelete } from "react-icons/md";
-import { doc, deleteDoc, collection, query, where, getDoc, onSnapshot } from 'firebase/firestore';
+import { doc, deleteDoc, collection, query, where, getDoc, onSnapshot, orderBy } from 'firebase/firestore';
 import { db } from '@/app/firebase';
 
 export default function TravelCard({ onOpenModal, trip, userUid, onDeleted }) {
@@ -10,7 +10,11 @@ export default function TravelCard({ onOpenModal, trip, userUid, onDeleted }) {
   useEffect(() => {
     if (!trip.id) return;
 
-    const requestsQuery = query(collection(db, 'souvenir_requests'), where('tripId', '==', trip.id));
+    const requestsQuery = query(
+      collection(db, 'souvenir_requests'), 
+      where('tripId', '==', trip.id),
+      orderBy('createdAt', 'desc')
+    );
     const unsubscribe = onSnapshot(requestsQuery, async (querySnapshot) => {
       const requestsData = await Promise.all(
         querySnapshot.docs.map(async (docSnap) => {

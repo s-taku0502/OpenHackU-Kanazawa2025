@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { MdDelete } from "react-icons/md";
 import { db } from '@/app/firebase';
-import { collection, query, where, onSnapshot, doc, getDoc, deleteDoc } from 'firebase/firestore';
+import { collection, query, where, onSnapshot, doc, getDoc, deleteDoc, orderBy } from 'firebase/firestore';
 
 export default function SouvenirPhoto({ userUid }) {
   const [souvenirs, setSouvenirs] = useState([]);
@@ -21,7 +21,7 @@ export default function SouvenirPhoto({ userUid }) {
   useEffect(() => {
     if (!groupId) return;
 
-    const q = query(collection(db, "souvenirs"), where("groupId", "==", groupId));
+    const q = query(collection(db, "souvenirs"), where("groupId", "==", groupId), orderBy("createdAt", "desc"));
     
     const unsubscribe = onSnapshot(q, async (querySnapshot) => {
       const souvenirsData = await Promise.all(
