@@ -15,7 +15,7 @@ const SearchResultPage = ({ group, onBack, onJoin, message, setMessage }) => {
                 {group && (
                     <div className="bg-gray-100 p-6 rounded-lg shadow-md w-full mb-8">
                         <div className="flex items-center space-x-4 mb-4">
-                            <div className="w-12 h-12 bg-gray-300 rounded-full flex-shrink-0"></div>
+                            {/* <div className="w-12 h-12 bg-gray-300 rounded-full flex-shrink-0"></div> */}
                             <div className="flex-1">
                                 <p className="font-semibold text-gray-800">{group.name}</p>
                                 <p className="text-sm text-gray-500">ID: {group.id}</p>
