@@ -3,6 +3,7 @@ import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { getStorage } from "firebase/storage";
+import { getAI, getGenerativeModel, GoogleAIBackend } from "firebase/ai";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -23,5 +24,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app, "openhackukanazawa2025");
 const auth = getAuth(app);
 const storage = getStorage(app);
+const ai = getAI(app, { backend: new GoogleAIBackend() });
+const model = getGenerativeModel(ai, { model: "gemini-2.5-flash-lite" });
 
-export { app, db, auth, storage };
+export { app, db, auth, storage, ai, model };

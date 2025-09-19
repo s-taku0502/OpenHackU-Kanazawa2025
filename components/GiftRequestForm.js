@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { db } from '../app/firebase';
+import { db, model } from '../app/firebase';
 import { collection, addDoc, serverTimestamp, doc, getDoc } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import { MdClose } from "react-icons/md";
@@ -68,7 +68,7 @@ export default function GiftRequestForm({ onCloseModal, tripId }) {
     setShowButton(false);
     setLoading(true);
     
-    const prompt = location + "のオススメのお土産を5つ教えてください。";
+    const prompt = "行き先：" + destination + "（訪れる予定地：" + location + ")のオススメのお土産を5つ教えてください。";
     try {
       const result = await model.generateContent(prompt);
       const response = result.response;
@@ -153,9 +153,7 @@ export default function GiftRequestForm({ onCloseModal, tripId }) {
 
           {showAiSuggestion && (
             <div className="relative mb-6" onClick={handleHideAiSuggestion}>
-              <div className="bg-white border border-orange-400 text-sm p-4 rounded-lg shadow-md relative bubble-bottom-left">
-                <p>お土産A</p>
-                <p>お土産B</p>
+              <div className="bg-white border border-orange-400 text-sm p-4 rounded-lg shadow-md relative h-48 overflow-y-scroll">
                 {loading ? <p>生成中...</p> : <ReactMarkdown>{output}</ReactMarkdown>}
               </div>
             </div>
