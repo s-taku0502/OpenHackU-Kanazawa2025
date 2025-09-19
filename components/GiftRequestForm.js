@@ -44,7 +44,7 @@ export default function GiftRequestForm({ onCloseModal, tripId }) {
     e.preventDefault();
     const user = auth.currentUser;
     if (!tripId) {
-      setMessage('旅行情報が取得できません');
+      setMessage('旅行情報が取得できません。');
       return;
     }
     try {
@@ -59,7 +59,7 @@ export default function GiftRequestForm({ onCloseModal, tripId }) {
       setComment('');
       onCloseModal();
     } catch (error) {
-      setMessage('登録に失敗しました');
+      setMessage('登録に失敗しました。');
     }
   };
 

@@ -75,7 +75,7 @@ const App = () => {
       setIsSuccess(true);
     } catch (error) {
       console.error(error);
-      setMessage(`エラー: ${error.message}`);
+      setMessage(`エラー`);
     }
   };
 

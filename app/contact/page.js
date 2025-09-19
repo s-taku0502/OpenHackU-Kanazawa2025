@@ -16,7 +16,7 @@ export default function Contact() {
 		e.preventDefault();
 		// バリデーション（メール形式チェックなどは省略）
 		if (!isFormFilled) {
-			setMessage("全ての項目を入力してください");
+			setMessage("全ての項目を入力してください。");
 			return;
 		}
 		setMessage("送信中...");
@@ -29,7 +29,6 @@ export default function Contact() {
 			});
 
 			if (res.ok) {
-				// alertの代わりにsetMessageを使用
 				setMessage("お問い合わせを送信しました。ありがとうございました！");
 				setType("");
 				setNickname("");
