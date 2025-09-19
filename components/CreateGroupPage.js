@@ -18,9 +18,9 @@ const CreateGroupPage = ({ onBack, onCreateGroup, message, setMessage }) => {
 
             <div className="flex-grow flex flex-col items-center justify-center p-4 w-full max-w-sm">
                 {/* アイコン */}
-                <div className="w-40 h-40 bg-gray-200 rounded-full flex items-center justify-center mb-8">
+                {/* <div className="w-40 h-40 bg-gray-200 rounded-full flex items-center justify-center mb-8">
                     <FaCamera className="text-4xl text-gray-500" />
-                </div>
+                </div> */}
 
                 {/* グループ名入力 */}
                 <form onSubmit={handleCreateClick} className="w-full text-center mb-4">

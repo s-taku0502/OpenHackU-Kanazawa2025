@@ -15,7 +15,7 @@ const UserList = ({ users, appliedGroupId, onApplyGroup }) => {
                 ${group.id === appliedGroupId ? 'bg-orange-100 border-2 border-orange-500' : 'bg-white'}`}
               onClick={() => onApplyGroup(group.id)}
             >
-              <div className="w-10 h-10 bg-gray-300 rounded-full flex-shrink-0"></div>
+              {/* <div className="w-10 h-10 bg-gray-300 rounded-full flex-shrink-0"></div> */}
               <div>
                 <div className="flex items-center space-x-2">
                   <p className="font-semibold text-gray-800">{group.name}</p>

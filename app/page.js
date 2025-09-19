@@ -22,6 +22,8 @@ export default function Home() {
   const [user, setUser] = useState(null);
   const [selectedTripId, setSelectedTripId] = useState(null);
   const [activeTab, setActiveTab] = useState('予定');
+  const [groupName, setGroupName] = useState('');
+  const [groupIconUrl, setGroupIconUrl] = useState('/file.svg');
   const auth = getAuth();
   const router = useRouter();
   const [isHeaderLoading, setIsHeaderLoading] = useState(false);
@@ -36,6 +38,14 @@ export default function Home() {
       const userDocSnap = await getDoc(userDocRef);
       if (userDocSnap.exists() && userDocSnap.data().applying_groupId) {
         const groupId = userDocSnap.data().applying_groupId;
+
+        const groupDocRef = doc(db, "groups", groupId);
+        const groupDocSnap = await getDoc(groupDocRef);
+        if (groupDocSnap.exists()) {
+          setGroupName(groupDocSnap.data().name || '');
+          setGroupIconUrl(groupDocSnap.data().group_image || '/file.svg');
+        }
+
         const q = query(collection(db, "trips"), where("groupId", "==", groupId), orderBy("createdAt", "desc"));
         const querySnapshot = await getDocs(q);
         const tripsData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
@@ -138,16 +148,19 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-orange-100 relative">
-  <header className="flex items-center justify-between p-4 bg-white border-b border-gray-200 relative">
-        <div className="w-10 h-10 relative">
-          <Image
-            src={'/file.svg'}
-            alt="グループアイコン"
-            fill
-            className="rounded-full"
-            sizes="35px"
-            priority
-          />
+      <header className="flex items-center justify-between p-4 bg-white border-b border-gray-200 relative">
+        <div className="flex items-center space-x-3">
+          {/* <div className="w-10 h-10 relative">
+            <Image
+              src={groupIconUrl}
+              alt="グループアイコン"
+              fill
+              className="rounded-full"
+              sizes="35px"
+              priority
+            />
+          </div> */}
+          <span className="font-semibold text-gray-800">{groupName}</span>
         </div>
         <div className="flex-1 flex justify-center">
           <nav className="flex space-x-4">
