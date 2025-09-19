@@ -39,22 +39,28 @@ export default function Home() {
         const q = query(collection(db, "trips"), where("groupId", "==", groupId));
         const querySnapshot = await getDocs(q);
         const tripsData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        const tripsWithTravelerNames = await Promise.all(
+        
+        const tripsWithTravelerInfo = await Promise.all(
           tripsData.map(async (trip) => {
             if (trip.travelerUid) {
               const travelerDocRef = doc(db, "users", trip.travelerUid);
               const travelerDocSnap = await getDoc(travelerDocRef);
               if (travelerDocSnap.exists()) {
-                return { ...trip, travelerName: travelerDocSnap.data().name };
+                const travelerData = travelerDocSnap.data();
+                return { 
+                  ...trip, 
+                  travelerName: travelerData.name,
+                  travelerIcon: travelerData.personal_image || null
+                };
               }
             }
-            return { ...trip, travelerName: '不明なユーザー' };
+            return { ...trip, travelerName: '不明なユーザー', travelerIcon: null };
           })
         );
-        setTrips(tripsWithTravelerNames);
+        setTrips(tripsWithTravelerInfo);
       }
     } catch (error) {
-      console.error("Failed to fetch trips:", error);
+      console.error("旅行データの取得に失敗しました:", error);
     }
   }, [user]);
 
@@ -107,7 +113,6 @@ export default function Home() {
     fetchTrips();
   };
 
-  // ...existing code...
   const handleGoGroup = () => {
     setIsHeaderLoading(true);
     router.push('/group');

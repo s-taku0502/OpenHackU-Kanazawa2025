@@ -15,6 +15,7 @@ export default function GiftRequestForm({ onCloseModal, tripId }) {
   const [showButton, setShowButton] = useState(true);
   const [destination, setDestination] = useState('');
   const [location, setLocation] = useState('');
+  const [travelerIcon, setTravelerIcon] = useState(null);
   const auth = getAuth();
 
   useEffect(() => {
@@ -22,8 +23,15 @@ export default function GiftRequestForm({ onCloseModal, tripId }) {
       if (!tripId) return;
       const tripDoc = await getDoc(doc(db, "trips", tripId));
       if (tripDoc.exists()) {
-        setDestination(tripDoc.data().destination || '');
-        setLocation(tripDoc.data().location || '');
+        const tripData = tripDoc.data();
+        setDestination(tripData.destination || '');
+        setLocation(tripData.location || '');
+        if (tripData.travelerUid) {
+          const userDoc = await getDoc(doc(db, "users", tripData.travelerUid));
+          if (userDoc.exists()) {
+            setTravelerIcon(userDoc.data().personal_image || null);
+          }
+        }
       }
     };
     fetchTrip();
@@ -74,13 +82,10 @@ export default function GiftRequestForm({ onCloseModal, tripId }) {
         </button>
         <div className="flex justify-center mb-6">
           <div className="w-20 h-20 relative rounded-full overflow-hidden">
-            <Image
-              src="/file.svg"
+            <img
+              src={travelerIcon || "/file.svg"}
               alt="User Icon"
-              fill
-              className="rounded-full"
-              sizes="80px"
-              priority
+              className="w-full h-full object-cover"
             />
           </div>
         </div>

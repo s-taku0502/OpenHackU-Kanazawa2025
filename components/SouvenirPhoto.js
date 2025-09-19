@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { MdDelete } from "react-icons/md";
-import Image from 'next/image';
 import { db } from '@/app/firebase';
 import { collection, query, where, getDocs, doc, getDoc, deleteDoc } from 'firebase/firestore';
 
@@ -28,16 +27,19 @@ export default function SouvenirPhoto({ userUid }) {
         querySnapshot.docs.map(async docSnap => {
           const data = docSnap.data();
           let userName = '';
+          let userIcon = null;
           if (data.userId) {
             const userDoc = await getDoc(doc(db, "users", data.userId));
             if (userDoc.exists()) {
               userName = userDoc.data().name || '';
+              userIcon = userDoc.data().personal_image || null;
             }
           }
           return {
             id: docSnap.id,
             ...data,
             userName,
+            userIcon,
           };
         })
       );
@@ -62,13 +64,10 @@ export default function SouvenirPhoto({ userUid }) {
             <div className="flex justify-between items-center mb-4 text-gray-500 text-sm">
               <div className="flex items-center space-x-2">
                 <div className="w-10 h-10 relative rounded-full overflow-hidden flex-shrink-0">
-                  <Image
-                    src={souvenir.travelerImage || '/file.svg'}
-                    alt="旅行者アイコン"
-                    fill
-                    className="rounded-full"
-                    sizes="35px"
-                    priority
+                  <img
+                    src={souvenir.userIcon || '/file.svg'}
+                    alt="投稿者アイコン"
+                    className="w-full h-full object-cover"
                   />
                 </div>
                 <p className='text-black'>{souvenir.userName}</p>

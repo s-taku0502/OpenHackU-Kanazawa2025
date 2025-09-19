@@ -1,11 +1,44 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { MdDelete } from "react-icons/md";
-import Image from 'next/image';
-import { doc, deleteDoc } from 'firebase/firestore';
+import { doc, deleteDoc, collection, query, where, getDocs, getDoc } from 'firebase/firestore';
 import { db } from '@/app/firebase';
 
 export default function TravelCard({ onOpenModal, trip, userUid, onDeleted }) {
   const [visible, setVisible] = useState(true);
+  const [requests, setRequests] = useState([]);
+
+  useEffect(() => {
+    if (!trip.id) return;
+
+    const fetchRequests = async () => {
+      const requestsQuery = query(collection(db, 'souvenir_requests'), where('tripId', '==', trip.id));
+      const querySnapshot = await getDocs(requestsQuery);
+      const requestsData = await Promise.all(
+        querySnapshot.docs.map(async (docSnap) => {
+          const request = docSnap.data();
+          let requesterName = '不明';
+          let requesterIcon = null;
+          if (request.requesterUid) {
+            const userDoc = await getDoc(doc(db, 'users', request.requesterUid));
+            if (userDoc.exists()) {
+              requesterName = userDoc.data().name;
+              requesterIcon = userDoc.data().personal_image;
+            }
+          }
+          return {
+            id: docSnap.id,
+            ...request,
+            requesterName,
+            requesterIcon,
+          };
+        })
+      );
+      setRequests(requestsData);
+    };
+
+    fetchRequests();
+  }, [trip.id]);
+
 
   const formatDate = (timestamp) => {
     if (!timestamp) return '未設定';
@@ -29,13 +62,10 @@ export default function TravelCard({ onOpenModal, trip, userUid, onDeleted }) {
       <div className="flex justify-between items-center mb-4">
         <div className="flex items-center space-x-2">
           <div className="w-10 h-10 relative rounded-full overflow-hidden flex-shrink-0">
-            <Image
-              src={'/file.svg'}
+            <img
+              src={trip.travelerIcon || '/file.svg'}
               alt="旅行者アイコン"
-              fill
-              className="rounded-full"
-              sizes="35px"
-              priority
+              className="w-full h-full object-cover"
             />
           </div>
           <p className='text-black'>{trip.travelerName}</p>
@@ -65,6 +95,31 @@ export default function TravelCard({ onOpenModal, trip, userUid, onDeleted }) {
           <p>{trip.comment}</p>
         </div>
       </div>
+
+      {requests.length > 0 && (
+        <div className="mt-6 pt-4 border-t border-gray-200">
+          <h3 className="font-semibold text-gray-800 mb-3">みんなからのお願い</h3>
+          <div className="space-y-4 max-h-48 overflow-y-auto">
+            {requests.map(req => (
+              <div key={req.id} className="flex items-start space-x-3">
+                <div className="w-8 h-8 relative rounded-full overflow-hidden flex-shrink-0">
+                  <img
+                    src={req.requesterIcon || '/file.svg'}
+                    alt={`${req.requesterName}のアイコン`}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-semibold text-gray-700">{req.requesterName}</p>
+                  <p className="text-sm text-gray-600">{req.souvenirName}</p>
+                  {req.comment && <p className="text-xs text-gray-500 mt-1">{req.comment}</p>}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       <div className="mt-6 flex flex-col items-center space-y-2">
         <button
           onClick={onOpenModal}
