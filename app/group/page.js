@@ -151,8 +151,7 @@ export default function GroupPage() {
       setSearchedGroup(null);
       setCurrentPage("groupList");
     } catch (error) {
-      console.error("グループ参加エラー");
-      // Corrected setter here
+      console.error("グループ参加エラー:", error);
       setJoinMessage("グループへの参加に失敗しました。");
     }
   };

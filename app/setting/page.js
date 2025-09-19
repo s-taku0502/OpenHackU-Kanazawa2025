@@ -104,7 +104,7 @@ export default function Setting() {
             await updateEmail(user, email);
             setEmailMsg("メールアドレスを変更しました");
         } catch (err) {
-            setEmailMsg("メールアドレス変更エラー");
+            setEmailMsg("メールアドレスの変更に失敗しました。");
         }
     };
 
@@ -131,7 +131,7 @@ export default function Setting() {
             setCurrentPassword("");
             setNewPassword("");
         } catch (err) {
-            setPwMsg("パスワード変更エラー");
+            setPwMsg("パスワードの変更に失敗しました。");
         }
     };
 
