@@ -155,11 +155,18 @@ export default function Setting() {
                     {iconUrl && (
                         <Image src={iconUrl} alt="icon" className="rounded-full mb-2" width={80} height={80} style={{ objectFit: "cover" }} />
                     )}
+                    <label
+                        htmlFor="icon-upload"
+                        className="cursor-pointer bg-gray-200 text-gray-700 font-medium px-4 py-2 rounded-full hover:bg-gray-300 transition mb-2"
+                    >
+                        ファイルを選択
+                    </label>
                     <input
+                        id="icon-upload"
                         type="file"
                         accept="image/*"
                         onChange={handleIconChange}
-                        className="mb-2"
+                        className="hidden"
                     />
                 </div>
                 <div className="w-full">
