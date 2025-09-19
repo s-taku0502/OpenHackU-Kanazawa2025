@@ -208,7 +208,7 @@ export default function Home() {
         <div className="fixed bottom-6 right-6 z-10">
           <button
             onClick={handleOpenSouvenirModal}
-            className="flex items-center space-x-2 px-6 py-3 bg-orange-500 text-black font-bold rounded-full shadow-lg hover:bg-orange-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-opacity-50"
+            className="flex items-center space-x-2 px-6 py-3 bg-orange-500 font-bold rounded-full shadow-lg hover:bg-orange-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-opacity-50"
           >
             <span>お土産の追加</span>
           </button>
