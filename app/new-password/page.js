@@ -75,7 +75,7 @@ const App = () => {
       setIsSuccess(true);
     } catch (error) {
       console.error(error);
-      setMessage(`エラー`);
+      setMessage(`パスワードの更新に失敗しました。`);
     }
   };
 
