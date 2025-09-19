@@ -82,8 +82,12 @@ export default function SouvenirPhoto({ userUid }) {
             <div className="text-gray-700 space-y-4">
               <div>
                 <span className="font-semibold block text-lg">お土産の写真</span>
-                <div className="w-full h-48 bg-gray-200 rounded-lg overflow-hidden mt-2">
-                  <img src={souvenir.image} alt="Souvenir" className="w-full h-full object-cover" />
+                <div className="w-full mt-2">
+                  <img 
+                    src={souvenir.image} 
+                    alt="Souvenir" 
+                    className="h-48 w-auto object-contain rounded-lg" 
+                  />
                 </div>
               </div>
               <div>
