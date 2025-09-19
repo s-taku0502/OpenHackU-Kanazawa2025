@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { useRouter } from 'next/navigation';
 
 export default function Contact() {
 	const [type, setType] = useState("");
@@ -7,6 +8,7 @@ export default function Contact() {
 	const [email, setEmail] = useState("");
 	const [content, setContent] = useState("");
 	const [message, setMessage] = useState("");
+	const router = useRouter();
 
 	const isFormFilled = type && nickname && email && content;
 
@@ -44,6 +46,13 @@ export default function Contact() {
 
 	return (
 		<div className="flex flex-col text-black items-center justify-center min-h-screen" style={{ backgroundColor: "#FFF7EE" }}>
+			<button
+				type="button"
+				className="absolute top-4 left-4 px-4 py-2 rounded-full bg-gray-200 text-gray-700 font-medium hover:bg-gray-300 transition"
+				onClick={() => router.back()}
+			>
+				← 戻る
+			</button>
 			<form
 				onSubmit={handleSubmit}
 				className="flex flex-col gap-4 p-8 rounded-lg bg-transparent items-center justify-center"
