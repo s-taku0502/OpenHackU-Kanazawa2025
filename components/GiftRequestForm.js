@@ -1,11 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { db } from '../app/firebase';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, serverTimestamp, doc, getDoc } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import { MdClose } from "react-icons/md";
-import Image from 'next/image'; // 1. next/imageをインポート
+import Image from 'next/image';
 
 export default function GiftRequestForm({ onCloseModal, tripId }) {
   const [souvenirName, setSouvenirName] = useState('');
@@ -13,7 +13,21 @@ export default function GiftRequestForm({ onCloseModal, tripId }) {
   const [message, setMessage] = useState('');
   const [showAiSuggestion, setShowAiSuggestion] = useState(false);
   const [showButton, setShowButton] = useState(true);
+  const [destination, setDestination] = useState('');
+  const [location, setLocation] = useState('');
   const auth = getAuth();
+
+  useEffect(() => {
+    const fetchTrip = async () => {
+      if (!tripId) return;
+      const tripDoc = await getDoc(doc(db, "trips", tripId));
+      if (tripDoc.exists()) {
+        setDestination(tripDoc.data().destination || '');
+        setLocation(tripDoc.data().location || '');
+      }
+    };
+    fetchTrip();
+  }, [tripId]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -59,13 +73,12 @@ export default function GiftRequestForm({ onCloseModal, tripId }) {
           <span><MdClose className="h-6 w-6" /></span>
         </button>
         <div className="flex justify-center mb-6">
-          {/* 2. divをImageコンポーネントに置き換えます */}
           <div className="w-20 h-20 relative rounded-full overflow-hidden">
             <Image
-              src="/file.svg" // アイコンのパスを指定
+              src="/file.svg"
               alt="User Icon"
-              fill // 親要素に合わせてサイズを自動調整
-              className="rounded-full" // スタイルを適用
+              fill
+              className="rounded-full"
               sizes="80px"
               priority
             />
@@ -73,12 +86,14 @@ export default function GiftRequestForm({ onCloseModal, tripId }) {
         </div>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label htmlFor="item" className="block text-gray-700 font-semibold mb-2">旅行予定地</label>
-            <input 
-              type="text" 
-              id="tripLocation" 
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-black" 
-            />
+            <label className="block text-gray-700 font-semibold mb-2">行先（旅行予定地）</label>
+            <div className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-100 text-black">
+              {destination
+                ? location
+                  ? `${destination}（${location}）`
+                  : destination
+                : '取得中...'}
+            </div>
           </div>
           <div className="mb-4">
             <label htmlFor="item" className="block text-gray-700 font-semibold mb-2">希望の物</label>
