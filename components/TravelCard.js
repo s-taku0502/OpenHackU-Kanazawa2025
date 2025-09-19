@@ -12,7 +12,7 @@ export default function TravelCard({ onOpenModal, trip, userUid }) {
 
   if (!visible) return null;
   return (
-    <div className="bg-white rounded-xl shadow-lg p-6 mx-4 my-6">
+    <div className="bg-white rounded-xl shadow-lg p-6 mx-4 my-6 font-sans">
       <div className="flex justify-between items-center mb-4">
         <div className="flex items-center space-x-2">
           <div className="w-10 h-10 relative rounded-full overflow-hidden flex-shrink-0">
@@ -60,15 +60,17 @@ export default function TravelCard({ onOpenModal, trip, userUid }) {
           お願いする
         </button>
         {userUid === trip.travelerUid && (
-          <button
-            onClick={() => {
-              if (window.confirm('本当に削除してよろしいですか？')) setVisible(false);
-            }}
-            className="flex items-center space-x-1 px-4 py-2 bg-red-500 text-white rounded-full text-sm hover:bg-red-600 transition-colors mt-2"
-          >
-            <span>削除</span>
-            <span><MdDelete className="text-xl text-white" /></span>
-          </button>
+          <div className="flex justify-end w-full mt-4">
+            <button
+              onClick={() => {
+                if (window.confirm('本当に削除してよろしいですか？')) setVisible(false);
+              }}
+              className="flex items-center space-x-1 px-4 py-2 bg-orange-500 text-white rounded-full text-sm hover:bg-orange-600 transition-colors"
+            >
+              <span>削除</span>
+              <span><MdDelete className="text-xl text-white" /></span>
+            </button>
+          </div>
         )}
       </div>
     </div>
