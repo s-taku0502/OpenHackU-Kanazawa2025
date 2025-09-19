@@ -11,7 +11,7 @@ import { FaCog } from 'react-icons/fa';
 import { CiMail } from "react-icons/ci";
 import { FaUserFriends } from "react-icons/fa";
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
+import { doc, getDoc, collection, query, where, getDocs, orderBy } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 
@@ -36,7 +36,7 @@ export default function Home() {
       const userDocSnap = await getDoc(userDocRef);
       if (userDocSnap.exists() && userDocSnap.data().applying_groupId) {
         const groupId = userDocSnap.data().applying_groupId;
-        const q = query(collection(db, "trips"), where("groupId", "==", groupId));
+        const q = query(collection(db, "trips"), where("groupId", "==", groupId), orderBy("createdAt", "desc"));
         const querySnapshot = await getDocs(q);
         const tripsData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         
