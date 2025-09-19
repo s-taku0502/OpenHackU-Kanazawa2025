@@ -5,6 +5,7 @@ import { db } from '../app/firebase';
 import { collection, addDoc, serverTimestamp, doc, getDoc } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import { MdClose } from "react-icons/md";
+import ReactMarkdown from "react-markdown";
 import Image from 'next/image';
 
 export default function GiftRequestForm({ onCloseModal, tripId }) {
@@ -17,6 +18,8 @@ export default function GiftRequestForm({ onCloseModal, tripId }) {
   const [location, setLocation] = useState('');
   const [travelerIcon, setTravelerIcon] = useState(null);
   const auth = getAuth();
+  const [output, setOutput] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchTrip = async () => {
@@ -60,9 +63,22 @@ export default function GiftRequestForm({ onCloseModal, tripId }) {
     }
   };
 
-  const handleShowAiSuggestion = () => {
+  const handleShowAiSuggestion = async () => {
     setShowAiSuggestion(true);
     setShowButton(false);
+    setLoading(true);
+    
+    const prompt = location + "のオススメのお土産を5つ教えてください。";
+    try {
+      const result = await model.generateContent(prompt);
+      const response = result.response;
+      const aiText = response.text();
+      setOutput(aiText);
+    } catch (error) {
+      setOutput("AIの提案の取得に失敗しました。");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleHideAiSuggestion = () => {
@@ -140,6 +156,7 @@ export default function GiftRequestForm({ onCloseModal, tripId }) {
               <div className="bg-white border border-orange-400 text-sm p-4 rounded-lg shadow-md relative bubble-bottom-left">
                 <p>お土産A</p>
                 <p>お土産B</p>
+                {loading ? <p>生成中...</p> : <ReactMarkdown>{output}</ReactMarkdown>}
               </div>
             </div>
           )}
