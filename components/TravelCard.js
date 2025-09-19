@@ -1,13 +1,26 @@
-
 import { useState } from 'react';
 import { MdDelete } from "react-icons/md";
 import Image from 'next/image';
+import { doc, deleteDoc } from 'firebase/firestore';
+import { db } from '@/app/firebase';
 
-export default function TravelCard({ onOpenModal, trip, userUid }) {
+export default function TravelCard({ onOpenModal, trip, userUid, onDeleted }) {
   const [visible, setVisible] = useState(true);
+
   const formatDate = (timestamp) => {
     if (!timestamp) return '未設定';
     return new Date(timestamp.seconds * 1000).toLocaleDateString();
+  };
+
+  const handleDelete = async () => {
+    if (!window.confirm('本当に削除してよろしいですか？')) return;
+    try {
+      await deleteDoc(doc(db, 'trips', trip.id));
+      setVisible(false);
+      if (onDeleted) onDeleted(trip.id);
+    } catch (error) {
+      alert('削除に失敗しました');
+    }
   };
 
   if (!visible) return null;
@@ -61,15 +74,13 @@ export default function TravelCard({ onOpenModal, trip, userUid }) {
         </button>
         {userUid === trip.travelerUid && (
           <div className="flex justify-end w-full mt-4">
-            <button
-              onClick={() => {
-                if (window.confirm('本当に削除してよろしいですか？')) setVisible(false);
-              }}
-              className="flex items-center space-x-1 px-4 py-2 bg-orange-500 text-white rounded-full text-sm hover:bg-orange-600 transition-colors"
-            >
-              <span>削除</span>
-              <span><MdDelete className="text-xl text-white" /></span>
-            </button>
+          <button
+            onClick={handleDelete}
+            className="flex items-center space-x-1 px-4 py-2 bg-orange-500 text-white rounded-full text-sm hover:bg-orange-600 transition-colors"
+          >
+            <span>削除</span>
+            <span><MdDelete className="text-xl text-white" /></span>
+          </button>
           </div>
         )}
       </div>
