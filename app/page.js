@@ -179,7 +179,7 @@ export default function Home() {
           <div className="space-y-6">
             {trips.length > 0 ? (
               trips.map(trip => (
-                <TravelCard key={trip.id} trip={trip} onOpenModal={() => handleOpenModal(trip.id)} />
+                <TravelCard key={trip.id} trip={trip} onOpenModal={() => handleOpenModal(trip.id)} userUid={user?.uid} />
               ))
             ) : (
               <p className="text-center mt-8 text-gray-500">登録されている旅行の予定はありません。</p>
@@ -188,7 +188,7 @@ export default function Home() {
         )}
         {activeTab === 'お土産' && (
           <div className="space-y-6">
-            <SouvenirPhoto />
+            <SouvenirPhoto userUid={user?.uid} />
           </div>
         )}
       </main>

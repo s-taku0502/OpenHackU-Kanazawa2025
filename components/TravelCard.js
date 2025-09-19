@@ -1,13 +1,18 @@
+
+import { useState } from 'react';
+import { MdDelete } from "react-icons/md";
 import Image from 'next/image';
 
-export default function TravelCard({ onOpenModal, trip }) {
+export default function TravelCard({ onOpenModal, trip, userUid }) {
+  const [visible, setVisible] = useState(true);
   const formatDate = (timestamp) => {
     if (!timestamp) return '未設定';
     return new Date(timestamp.seconds * 1000).toLocaleDateString();
   };
 
+  if (!visible) return null;
   return (
-    <div className="bg-white rounded-xl shadow-lg p-6 mx-4 my-6">
+    <div className="bg-white rounded-xl shadow-lg p-6 mx-4 my-6 font-sans">
       <div className="flex justify-between items-center mb-4">
         <div className="flex items-center space-x-2">
           <div className="w-10 h-10 relative rounded-full overflow-hidden flex-shrink-0">
@@ -47,13 +52,26 @@ export default function TravelCard({ onOpenModal, trip }) {
           <p>{trip.comment}</p>
         </div>
       </div>
-      <div className="mt-6 text-center">
+      <div className="mt-6 flex flex-col items-center space-y-2">
         <button
           onClick={onOpenModal}
           className="bg-orange-500 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-orange-600 transition-colors"
         >
           お願いする
         </button>
+        {userUid === trip.travelerUid && (
+          <div className="flex justify-end w-full mt-4">
+            <button
+              onClick={() => {
+                if (window.confirm('本当に削除してよろしいですか？')) setVisible(false);
+              }}
+              className="flex items-center space-x-1 px-4 py-2 bg-orange-500 text-white rounded-full text-sm hover:bg-orange-600 transition-colors"
+            >
+              <span>削除</span>
+              <span><MdDelete className="text-xl text-white" /></span>
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -2,8 +2,12 @@ import React from 'react';
 import { MdDelete } from "react-icons/md";
 import Image from 'next/image';
 
-export default function SouvenirPhoto() {
-  const souvenirs = [
+
+import { useState } from 'react';
+
+// userUid: 現在ログイン中のユーザーのUIDをpropsで受け取る
+export default function SouvenirPhoto({ userUid }) {
+  const [souvenirs, setSouvenirs] = useState([
     {
       id: 'souvenir_01',
       image: 'https://images.unsplash.com/photo-1549488344-935108424072',
@@ -14,12 +18,41 @@ export default function SouvenirPhoto() {
       comment: '定番のお土産です。',
       postDate: '2025/9/18',
       travelerName: 'ナタデココ',
-      travelerImage: '/file.svg'
+      travelerImage: '/file.svg',
+      travelerUid: 'uid_01',
+    },
+    {
+      id: 'souvenir_02',
+      image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb',
+      name: '金沢の和菓子',
+      expiration: '2025/10/10',
+      quantity: '5個',
+      location: '金沢駅',
+      comment: '上品な甘さが特徴です。',
+      postDate: '2025/9/17',
+      travelerName: 'たくみ',
+      travelerImage: '/globe.svg',
+      travelerUid: 'uid_02',
+    },
+    {
+      id: 'souvenir_03',
+      image: 'https://images.unsplash.com/photo-1519125323398-675f0ddb6308',
+      name: '北海道チーズケーキ',
+      expiration: '2025/11/05',
+      quantity: '3個',
+      location: '新千歳空港',
+      comment: '濃厚で美味しい！',
+      postDate: '2025/9/16',
+      travelerName: 'さくら',
+      travelerImage: '/window.svg',
+      travelerUid: 'uid_01',
     }
-  ];
+  ]);
 
   const handleDelete = (id) => {
-    console.log(`Deleting souvenir with id: ${id}`);
+    if (window.confirm('本当に削除してよろしいですか？')) {
+      setSouvenirs((prev) => prev.filter((souvenir) => souvenir.id !== id));
+    }
   };
 
   return (
@@ -71,7 +104,8 @@ export default function SouvenirPhoto() {
             </div>
           </div>
 
-          <div className="flex justify-end mt-4">
+          {/* 誰でも削除ボタンを表示 */}
+          {/* <div className="flex justify-end mt-4">
             <button
               onClick={() => handleDelete(souvenir.id)}
               className="flex items-center space-x-1 px-4 py-2 bg-orange-500 text-white rounded-full text-sm hover:bg-orange-600 transition-colors"
@@ -79,7 +113,19 @@ export default function SouvenirPhoto() {
               <span>削除</span>
               <span><MdDelete className="text-xl text-white" /></span>
             </button>
-          </div>
+          </div> */}
+          {/* 投稿者のみ削除ボタンを表示 */}
+          {userUid === souvenir.travelerUid && (
+            <div className="flex justify-end mt-4">
+              <button
+                onClick={() => handleDelete(souvenir.id)}
+                className="flex items-center space-x-1 px-4 py-2 bg-orange-500 text-white rounded-full text-sm hover:bg-orange-600 transition-colors"
+              >
+                <span>削除</span>
+                <span><MdDelete className="text-xl text-white" /></span>
+              </button>
+            </div>
+          )}
         </div>
       ))}
     </div>
