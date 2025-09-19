@@ -43,7 +43,7 @@ export default function Contact() {
 	};
 
 	return (
-		<div className="flex flex-col items-center justify-center min-h-screen" style={{ backgroundColor: "#FFF7EE" }}>
+		<div className="flex flex-col text-black items-center justify-center min-h-screen" style={{ backgroundColor: "#FFF7EE" }}>
 			<form
 				onSubmit={handleSubmit}
 				className="flex flex-col gap-4 p-8 rounded-lg bg-transparent items-center justify-center"
