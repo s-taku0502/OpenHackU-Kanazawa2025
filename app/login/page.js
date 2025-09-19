@@ -20,7 +20,7 @@ export default function SignIn() {
                 router.push("/");
             })
             .catch((error) => {
-                setMessage("エラー: " + error.message);
+                setMessage("メールアドレスまたはパスワードが正しくありません。");
             });
     }
 

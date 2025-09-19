@@ -22,7 +22,7 @@ export default function SignUp() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (password !== confirmPassword) {
-            setMessage("エラー: パスワードが一致しません");
+            setMessage("エラー: パスワードが一致しません。");
             return;
         }
         try {
@@ -36,7 +36,7 @@ export default function SignUp() {
 
             router.push("/");
         } catch (error) {
-            setMessage("エラー: " + error.message);
+            setMessage("エラー: メールアドレスが既に使用されています。");
         }
     }
 

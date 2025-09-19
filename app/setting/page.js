@@ -84,7 +84,7 @@ export default function Setting() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!isFormFilled) {
-            setMessage("全ての項目を入力してください");
+            setMessage("全ての項目を入力してください。");
             return;
         }
         await setDoc(doc(db, "users", user.uid), {
@@ -92,7 +92,7 @@ export default function Setting() {
             bio,
             personal_image: iconUrl,
         }, { merge: true });
-        setMessage("プロフィールを保存しました");
+        setMessage("プロフィールを保存しました。");
     };
 
     // メールアドレス変更
@@ -104,7 +104,7 @@ export default function Setting() {
             await updateEmail(user, email);
             setEmailMsg("メールアドレスを変更しました");
         } catch (err) {
-            setEmailMsg("メールアドレス変更エラー: " + err.message);
+            setEmailMsg("メールアドレス変更エラー");
         }
     };
 
@@ -121,7 +121,7 @@ export default function Setting() {
         try {
             await reauthenticateWithCredential(user, credential);
         } catch (err) {
-            setPwMsg("再認証エラー: " + (err.message || "現在のパスワードが正しくありません"));
+            setPwMsg("再認証エラー: 現在のパスワードが正しくありません");
             return;
         }
         // パスワード変更
@@ -131,7 +131,7 @@ export default function Setting() {
             setCurrentPassword("");
             setNewPassword("");
         } catch (err) {
-            setPwMsg("パスワード変更エラー: " + err.message);
+            setPwMsg("パスワード変更エラー");
         }
     };
 

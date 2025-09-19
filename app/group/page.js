@@ -89,7 +89,7 @@ export default function GroupPage() {
     } catch (error) {
       console.error("グループ作成エラー:", error);
       // Corrected setter here
-      setCreateMessage("グループの作成に失敗しました: ${error.message}");
+      setCreateMessage("グループの作成に失敗しました");
     }
   };
 
@@ -110,7 +110,7 @@ export default function GroupPage() {
     } catch (error) {
       console.error("グループ検索エラー:", error);
       // Corrected setter here
-      setJoinMessage("グループの検索に失敗しました: ${error.message}");
+      setJoinMessage("グループの検索に失敗しました。");
       setSearchedGroup(null);
     }
   };
@@ -151,9 +151,9 @@ export default function GroupPage() {
       setSearchedGroup(null);
       setCurrentPage("groupList");
     } catch (error) {
-      console.error("グループ参加エラー:", error);
+      console.error("グループ参加エラー");
       // Corrected setter here
-      setJoinMessage("グループへの参加に失敗しました: ${error.message}");
+      setJoinMessage("グループへの参加に失敗しました。");
     }
   };
 
@@ -170,7 +170,7 @@ export default function GroupPage() {
     } catch (error) {
       console.error("グループ適用エラー:", error);
       // Corrected setter here
-      setJoinMessage("グループの適用に失敗しました: ${error.message}");
+      setJoinMessage("グループの適用に失敗しました。");
     }
   };
   const [currentPage, setCurrentPage] = useState("groupList");
