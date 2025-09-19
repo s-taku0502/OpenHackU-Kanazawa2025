@@ -55,7 +55,7 @@ export default function TravelCard({ onOpenModal, trip, userUid }) {
       <div className="mt-6 flex flex-col items-center space-y-2">
         <button
           onClick={onOpenModal}
-          className="bg-orange-500 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-orange-600 transition-colors"
+          className="bg-orange-500 font-bold py-3 px-8 rounded-full shadow-lg hover:bg-orange-600 transition-colors"
         >
           お願いする
         </button>

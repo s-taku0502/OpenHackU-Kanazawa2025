@@ -108,7 +108,7 @@ export default function GiftRequestForm({ onCloseModal, tripId }) {
               <button
                 type="button"
                 onClick={handleShowAiSuggestion}
-                className="bg-orange-400 text-white text-xs px-4 py-2 rounded-lg shadow-md relative bubble"
+                className="bg-orange-400 text-black text-xs px-4 py-2 rounded-lg shadow-md relative bubble"
               >
                 AIにお土産を提案してもらう
               </button>
@@ -127,7 +127,7 @@ export default function GiftRequestForm({ onCloseModal, tripId }) {
           {message && <p>{message}</p>}
           <button
             type="submit"
-            className="w-full bg-orange-500 text-white font-bold py-3 rounded-full shadow-lg hover:bg-orange-600 transition-colors"
+            className="w-full bg-orange-500 text-black font-bold py-3 rounded-full shadow-lg hover:bg-orange-600 transition-colors"
           >
             登録
           </button>

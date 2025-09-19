@@ -136,7 +136,7 @@ export default function Setting() {
     };
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen" style={{ backgroundColor: "#FFF7EE" }}>
+        <div className="flex flex-col text-black items-center justify-center min-h-screen" style={{ backgroundColor: "#FFF7EE" }}>
             <button
                 type="button"
                 className="self-start ml-4 mt-4 px-4 py-2 rounded-full bg-gray-200 text-gray-700 font-medium hover:bg-gray-300 transition"
@@ -198,7 +198,7 @@ export default function Setting() {
                 <div className="w-full">
                     <button
                         type="submit"
-                        className={`px-6 py-2 text-white font-bold transition mx-auto block w-full ${!isFormFilled ? 'grayscale opacity-60 cursor-not-allowed' : 'hover:opacity-90'}`}
+                        className={`px-6 py-2 text-black font-bold transition mx-auto block w-full ${!isFormFilled ? 'grayscale opacity-60 cursor-not-allowed' : 'hover:opacity-90'}`}
                         style={{
                             borderRadius: "25px",
                             background: "#FF9F1C",
@@ -238,7 +238,7 @@ export default function Setting() {
                     />
                     <button
                         type="submit"
-                        className={`px-6 py-2 text-white font-bold transition mx-auto block w-full hover:opacity-90`}
+                        className={`px-6 py-2 text-black font-bold transition mx-auto block w-full hover:opacity-90`}
                         style={{
                             borderRadius: "25px",
                             background: "#FF9F1C",
@@ -348,7 +348,7 @@ export default function Setting() {
                     </div>
                     <button
                         type="submit"
-                        className={`px-6 py-2 text-white font-bold transition mx-auto block w-full hover:opacity-90`}
+                        className={`px-6 py-2 text-black font-bold transition mx-auto block w-full hover:opacity-90`}
                         style={{
                             borderRadius: "25px",
                             background: "#FF9F1C",
